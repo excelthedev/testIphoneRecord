@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "gilroy-medium";
+  src: url("./assets/Fonts/Gilroy-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "gilroy-bold";
+  src: url("./assets/Fonts/Gilroy-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "gilroy-regular";
+  src: url("./assets/Fonts/Gilroy-Regular.ttf") format("truetype");
+}
+.pulsating-icon {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  margin: 0.5rem;
+  border-radius: 50%;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  /* display: none; */
+}
+
+::-webkit-scrollbar-track:hover {
+  display: block;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8dc1ff;
+
+  /* display: none; */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #94a0b4;
+  border-radius: 12px;
+  display: block;
+}
+.loader {
+  animation: loader 0.8s ease-in-out infinite alternate;
+}
+@keyframes loader {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(1);
+  }
+}
