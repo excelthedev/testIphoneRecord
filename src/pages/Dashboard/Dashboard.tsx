@@ -9,6 +9,7 @@ import { Spin } from "antd";
 import { userInfoObject } from "./components/Header";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import AudioChunker from "./components/RecordChunker";
+import Footer from "../Homepage/Components/Footer";
 
 const Dashboard = () => {
   const { data, isFetching, isLoading } = useGetDataQuery({
@@ -57,6 +58,7 @@ const Dashboard = () => {
           <Recorder />
         </div>
       </Spin>
+      <Footer />
     </div>
   );
 };
