@@ -1,7 +1,7 @@
-import Audio from './WelcomeSvgc/Audio.tsx';
-import Translate from './WelcomeSvgc/Translate.tsx';
-import Transcribe from './WelcomeSvgc/Transcribe.tsx';
-import Mic from './WelcomeSvgc/Mic.tsx';
+import Audio from '../../../assets/icons/Audio.tsx';
+import Translate from '../../../assets/icons/Translate.tsx';
+import Transcribe from '../../../assets/icons/Transcribe.tsx';
+import Mic from '../../../assets/icons/Mic.tsx';
 
 const welcomeIcons = [
   {
