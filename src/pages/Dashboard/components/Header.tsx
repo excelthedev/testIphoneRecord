@@ -50,11 +50,11 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
       <div className="bg-[#FFFFFF] py-3 sm:py-6 px-2 md:px-8 flex justify-between items-center border-[0.6px] rounded-xl  transition-all w-full ">
         <LangEasyLogo />
         <div className="flex flex-wrap items-center justify-center gap-2 md:gap-5">
-          <span className="flex items-center gap-2 font-[gilroy-medium]">
+          <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
             <p className="w-3 h-3 rounded-[50%] bg-black"></p>
             <p className="text-xs font-semibold lg:text-lg"> Text Collection</p>
           </span>
-          <span className="flex items-center gap-2 font-[gilroy-medium]">
+          <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
             <p className="w-3 h-3 rounded-[50%] border border-[#666F8D]"></p>
             <p className=" text-xs lg:text-lg font-semibold text-[#666F8D]">
               Audio Collection

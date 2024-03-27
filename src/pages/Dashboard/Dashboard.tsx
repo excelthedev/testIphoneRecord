@@ -54,22 +54,22 @@ const Dashboard = () => {
       />
 
       <section>
-        <div className="grid grid-cols-2 mt-6 place-items-center place-content-center">
-          <div className="flex flex-wrap gap-5 h-max">
-            <span className="py-2 px-4 bg-white text-[#19213D] rounded-xl flex justify-center items-center w-max text-sm font-[gilroy-medium] gap-2">
+        <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
+          <div className="flex gap-5 h-max">
+            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
               <Recording />
-              <p>Record</p>
+              <p className="hidden sm:block">Record</p>
             </span>
-            <span className="py-2 px-4 bg-white text-[#19213D] rounded-xl flex justify-center items-center w-max text-sm font-[gilroy-medium] gap-2">
+            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
               <Translate />
-              <p>Translate</p>
+              <p className="hidden sm:block">Translate</p>
             </span>
-            <span className="py-2 px-4 bg-white text-[#19213D] rounded-xl flex justify-center items-center w-max text-sm font-[gilroy-medium] gap-2">
+            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
               <Speak />
-              Speak
+              <p className="hidden sm:block"> Speak</p>
             </span>
           </div>
-          <div className=" text-[#333333] w-[70%] gap-3 ">
+          <div className=" text-[#333333] md:w-[70%] gap-3 w-full ">
             <span className="flex items-center justify-between text-sm">
               <p>Total Task</p>
               <p>50</p>
@@ -82,10 +82,11 @@ const Dashboard = () => {
             <Progress percent={70} showInfo={false} />
           </div>
         </div>
-        <span className="flex items-center justify-center gap-2 mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] ">
-          <p>Click</p>
-          <Speak />
-          <p> and read the sentence aloud in the displayed language</p>
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
+          <span className="flex items-center justify-center">
+            Click <Speak />
+          </span>
+          <span>and read the sentence aloud in the displayed language</span>
         </span>
         <SentenceBank />
         <div className="mt-10 w-[80%] sm:w-[60%] mx-auto">
