@@ -2,6 +2,7 @@ import Audio from '../../../assets/icons/Audio.tsx';
 import Translate from '../../../assets/icons/Translate.tsx';
 import Transcribe from '../../../assets/icons/Transcribe.tsx';
 import Mic from '../../../assets/icons/Mic.tsx';
+import { useLocation } from 'react-router-dom';
 
 const welcomeIcons = [
   {
@@ -27,12 +28,21 @@ const welcomeIcons = [
 ];
 
 const WelcomeText: React.FC = () => {
+  const location = useLocation();
+
   return (
     <div className=" h-[478px]  w-[auto] rounded-md flex justify-center items-center">
       <div className="">
-        <p className=" text-[2rem] font-bold text-center text-[#19213D] font-[gilroy-bold]">
-          Welcome back to LangEasy{' '}
-        </p>
+        {location.pathname === '/signup' ? (
+          <p className="text-[2rem] font-bold text-center text-[#19213D] font-[gilroy-bold]">
+            Welcome To LangEasy{' '}
+          </p>
+        ) : (
+          <p className="text-[2rem] font-bold text-center text-[#19213D] font-[gilroy-bold]">
+            Welcome back to LangEasy{' '}
+          </p>
+        )}
+
         <p className=" text-center text-[0.9rem] font-normal w-[75%] m-auto text-[#333333] font-[gilroy-medium]">
           Transforming language learning by utilizing cutting-edge data
           collection and analysis methods.
