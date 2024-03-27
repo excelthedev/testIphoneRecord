@@ -6,6 +6,7 @@ import { PageModal } from "../../../components/Modal";
 import { Popover } from "antd";
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../../utils/routes";
+import HamburgerIcon from "../../../assets/icons/HamburgerIcon";
 
 export type userInfoType = {
   _id?: string;
@@ -28,6 +29,7 @@ export type userInfoObject = {
 const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
+  const [openMenu, setOpenMenu] = useState(false);
   // const state = useAppSelector((state) => {
   //   return state.app;
   // });
@@ -47,53 +49,68 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
 
   return (
     <>
-      <div className="bg-[#FFFFFF] py-3 sm:py-6 px-2 md:px-8 flex justify-between items-center border-[0.6px] rounded-xl  transition-all w-full ">
+      <div className="bg-[#FFFFFF] py-3 sm:py-6 px-2 md:px-8 border-[0.6px] rounded-xl transition-all w-full grid grid-cols-[23rem_1fr]">
         <LangEasyLogo />
-        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-5">
-          <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
-            <p className="w-3 h-3 rounded-[50%] bg-black"></p>
-            <p className="text-xs font-semibold lg:text-lg"> Text Collection</p>
-          </span>
-          <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
-            <p className="w-3 h-3 rounded-[50%] border border-[#666F8D]"></p>
-            <p className=" text-xs lg:text-lg font-semibold text-[#666F8D]">
-              Audio Collection
-            </p>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Popover
-            showArrow={false}
-            content={
-              <div
-                className="bg-[#FFFFFF] flex items-center mx-4 my-2 gap-2 cursor-pointer"
-                onClick={() => {
-                  setOpenModal(!openModal);
-                }}
-              >
-                <p>Log out</p>
-                <LogoutIcon />
+
+        <div
+          className={`flex justify-between w-full ${openMenu ? "flex-col" : "flex-row"}`}
+        >
+          <div className="flex items-center justify-center gap-2 md:gap-5">
+            <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
+              <p className="w-3 h-3 rounded-[50%] bg-black"></p>
+              <p className="text-xs font-semibold lg:text-lg">
+                {" "}
+                Text Collection
+              </p>
+            </span>
+            <span className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer">
+              <p className="w-3 h-3 rounded-[50%] border border-[#666F8D]"></p>
+              <p className=" text-xs lg:text-lg font-semibold text-[#666F8D]">
+                Audio Collection
+              </p>
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Popover
+              showArrow={false}
+              content={
+                <div
+                  className="bg-[#FFFFFF] flex items-center mx-4 my-2 gap-2 cursor-pointer"
+                  onClick={() => {
+                    setOpenModal(!openModal);
+                  }}
+                >
+                  <p>Log out</p>
+                  <LogoutIcon />
+                </div>
+              }
+            >
+              <div className="flex gap-2">
+                <span className="p-2 border rounded-[50%] h-10 w-10 flex items-center justify-center">
+                  {firstname?.charAt(0) + " " + lastname?.charAt(0)}
+                </span>
+                <div className="cursor-pointer ">
+                  <p className="text-[#19213D] font-[gilroy-medium] hidden md:text-base font-normal md:flex items-center gap-1 ">
+                    <span>
+                      {firstname} {lastname}
+                    </span>{" "}
+                    <DropdownIcon />
+                  </p>
+                  <p className="text-[#666F8D] text-[10px] md:text-xs font-normal hidden md:block">
+                    {email}
+                  </p>
+                </div>
               </div>
-            }
-          >
-            <div className="flex gap-2">
-              <span className="p-2 border rounded-[50%] h-10 w-10 flex items-center justify-center">
-                {firstname?.charAt(0) + " " + lastname?.charAt(0)}
-              </span>
-              <div className="cursor-pointer ">
-                <p className="text-[#19213D] font-[gilroy-medium] hidden md:text-base font-normal md:flex items-center gap-1 ">
-                  <span>
-                    {firstname} {lastname}
-                  </span>{" "}
-                  <DropdownIcon />
-                </p>
-                <p className="text-[#666F8D] text-[10px] md:text-xs font-normal hidden md:block">
-                  {email}
-                </p>
-              </div>
-            </div>
-          </Popover>
+            </Popover>
+          </div>
         </div>
+
+        <HamburgerIcon
+          className="block md:hidden"
+          onClick={() => {
+            setOpenMenu(!openMenu);
+          }}
+        />
       </div>
       <PageModal
         openModal={openModal}
