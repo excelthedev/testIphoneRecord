@@ -1,13 +1,13 @@
-import { Card } from 'antd';
-import Footer from '../../../assets/Logos/AwarriLogo/Footer';
-import LangEasyLogo from '../../../assets/Logos/LangeasyLogo/LangEasyLogo';
+import { Card } from "antd";
+import Footer from "../../../assets/Logos/AwarriLogo/Footer";
+import LangEasyLogo from "../../../assets/Logos/LangeasyLogo/LangEasyLogo";
 // import WavIcon from "../../../assets/icons/WavIcon.png";
-import ArrowIcon from '../../../assets/icons/ArrowIcon';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../utils/routes';
-import { useEffect } from 'react';
+import ArrowIcon from "../../../assets/icons/ArrowIcon";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../utils/routes";
+import { useEffect } from "react";
 // import { motion } from "framer-motion";
-import WelcomeText from './WelcomeText';
+import WelcomeText from "./WelcomeText";
 
 const Background: React.FC = () => {
   const location = useLocation();
@@ -39,7 +39,7 @@ const Background: React.FC = () => {
           /> */}
           <WelcomeText />
           <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full sm:w-[50%] md:w-[40rem] max-w-[40rem] md:py-3">
-            {location.pathname !== '/' && (
+            {location.pathname !== "/" && (
               <ArrowIcon
                 className="cursor-pointer "
                 onClick={() => {
