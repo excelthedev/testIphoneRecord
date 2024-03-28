@@ -12,6 +12,7 @@ import Speak from "../../assets/icons/Speak";
 import SentenceBank from "./components/SentenceBank";
 import MicIcon from "../../assets/icons/MicIcon";
 import Button from "../../components/Button";
+import Footer from "../Homepage/Components/Footer";
 
 const Dashboard = () => {
   const { data, isFetching, isLoading } = useGetDataQuery({
@@ -53,7 +54,7 @@ const Dashboard = () => {
         _id={userInfo?._id ?? ""}
       />
 
-      <section>
+      <section className=" min-h-[80svh]">
         <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
           <div className="flex gap-5 h-max">
             <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
@@ -104,6 +105,7 @@ const Dashboard = () => {
           </Button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
