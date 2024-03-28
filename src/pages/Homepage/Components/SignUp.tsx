@@ -217,14 +217,14 @@ const SignUp = () => {
             name: "gender",
             value: state.request?.gender,
           },
-          // {
-          //   name: "dateOfBirth",
-          //   value: formData.dateOfBirth,
-          // },
           {
-            name: "stateOfOrigin",
-            value: state.request?.stateOfOrigin,
+            name: "accent",
+            value: state.request?.accent,
           },
+          // {
+          //   name: "stateOfOrigin",
+          //   value: state.request?.stateOfOrigin,
+          // },
           {
             name: "tribe",
             value: state.request?.tribe,
@@ -293,7 +293,7 @@ const SignUp = () => {
           ]}
         >
           <Input
-            className="w-full py-4 rounded-xl placeholder:font-[gilroy-regular] placeholder:font-normal placeholder:text-[#666666] placeholder:text-base"
+             className="w-full py-4 rounded-xl placeholder:font-[gilroy-regular] placeholder:font-normal placeholder:text-[#666666] placeholder:text-base"
             placeholder="Enter your email address"
             onChange={(e) => {
               setRequest("email", e.target.value);
@@ -391,6 +391,27 @@ const SignUp = () => {
         <Form.Item
           label={
             <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
+              Accent
+            </span>
+          }
+          rules={[{ required: true, message: "Accent is required" }]} name={"accent"}
+        >
+          <Select
+            placeholder="Select your Accent"
+            onChange={(e) => {
+              setRequest("accent", e);
+            }}
+          >
+            <Select.Option>Select your Accent</Select.Option>
+            <Select.Option value="yoruba">Accent 1</Select.Option>
+            <Select.Option value="hausa">Accent 2</Select.Option>
+            <Select.Option value="igbo">Accent 3</Select.Option>
+          </Select>
+        </Form.Item>
+
+        {/* <Form.Item
+          label={
+            <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
               State
             </span>
           }
@@ -421,7 +442,7 @@ const SignUp = () => {
                 : []
             }
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
           label={
