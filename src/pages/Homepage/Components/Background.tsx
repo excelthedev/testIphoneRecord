@@ -24,10 +24,10 @@ const Background: React.FC = () => {
   return (
     <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative">
       <div className="grid grid-rows-[4rem_1fr_2rem] place-content-center min-h-[80svh] mx-4  overflow-hidden ">
-        <div className="flex justify-start ">
+        <div className="flex justify-start">
           <LangEasyLogo />
         </div>
-        <div className="flex flex-col items-center gap-8 justify-around sm:flex-row">
+        <div className="flex flex-col gap-8 justify-around sm:flex-row items-center">
           {/* <motion.img
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -38,8 +38,9 @@ const Background: React.FC = () => {
             loading="lazy"
           /> */}
           <WelcomeText />
-          <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full sm:w-[50%] md:w-[40rem] max-w-[40rem] md:py-3">
-            {location.pathname !== "/" && (
+          <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full  md:py-3 ">
+            {location.pathname !== '/' && (
+
               <ArrowIcon
                 className="cursor-pointer "
                 onClick={() => {

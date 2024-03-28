@@ -1,17 +1,11 @@
-import Audio from "../../../assets/icons/Audio.tsx";
-import Translate from "../../../assets/icons/Translate.tsx";
-import Transcribe from "../../../assets/icons/Transcribe.tsx";
-import Mic from "../../../assets/icons/Mic.tsx";
-import { useLocation } from "react-router-dom";
+import Audio from '../../../assets/icons/Audio.tsx';
+import Translate from '../../../assets/icons/Translate.tsx';
+import Mic from '../../../assets/icons/Mic.tsx';
+import { useLocation } from 'react-router-dom';
 
 const welcomeIcons = [
   {
-    logo: "transcribe",
-    icon: <Transcribe />,
-    backgroundColor: "#096A95",
-  },
-  {
-    logo: "wave",
+    logo: 'wave',
     icon: <Audio />,
     backgroundColor: "#ffffff",
   },
@@ -31,15 +25,15 @@ const WelcomeText: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className=" h-[478px]  w-[auto] rounded-md flex justify-center items-center">
-      <div className="">
-        {location.pathname === "/signup" ? (
-          <p className="text-[2rem] font-bold text-center text-[#19213D] font-[gilroy-bold]">
-            Welcome To LangEasy{" "}
+    <div className=" h-[478px]  w-[auto] rounded-md flex justify-center items-center lg:w-[100%] ">
+      <div className=" w-[100%]">
+        {location.pathname === '/signup' ? (
+          <p className="text-[1.4rem] font-bold text-center text-[#19213D] font-[gilroy-bold] md:text-[2rem]">
+            Welcome To LangEasy
           </p>
         ) : (
-          <p className="text-[2rem] font-bold text-center text-[#19213D] font-[gilroy-bold]">
-            Welcome back to LangEasy{" "}
+          <p className="text-[1.4rem] font-bold text-center text-[#19213D] font-[gilroy-bold] md:text-[2rem]">
+            Welcome back to LangEasy
           </p>
         )}
 
@@ -47,8 +41,8 @@ const WelcomeText: React.FC = () => {
           Transforming language learning by utilizing cutting-edge data
           collection and analysis methods.
         </p>
-        <div className="flex flex-col gap-3 mt-5 ">
-          <div className=" w-[90%] h-[14px] rounded-md bg-white m-auto"></div>
+        <div className=" mt-5 flex flex-col gap-3">
+          <div className=" md:w-[90%] sm:w-[60%] w-[90%] h-[14px] rounded-md bg-white m-auto"></div>
           <div className="  h-[50px] w-[60%] m-auto flex justify-between">
             {welcomeIcons.map((item, index) => (
               <div
