@@ -29,11 +29,11 @@ const WelcomeText: React.FC = () => {
       <div className=" w-[100%]">
         {location.pathname === '/signup' ? (
           <p className="text-[1.4rem] font-bold text-center text-[#19213D] font-[gilroy-bold] md:text-[2rem]">
-            Welcome To LangEasy{' '}
+            Welcome To LangEasy
           </p>
         ) : (
           <p className="text-[1.4rem] font-bold text-center text-[#19213D] font-[gilroy-bold] md:text-[2rem]">
-            Welcome back to LangEasy{' '}
+            Welcome back to LangEasy
           </p>
         )}
 
