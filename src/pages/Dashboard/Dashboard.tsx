@@ -55,7 +55,7 @@ const Dashboard = () => {
           <Welcome />
           <AudioChunker />
           <WordBank />
-          <Recorder />
+          {/* <Recorder /> */}
         </div>
       </Spin>
       <Footer />
