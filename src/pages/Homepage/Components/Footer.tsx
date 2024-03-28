@@ -1,20 +1,23 @@
-import React from "react";
 import AwarriLogo from "../../../assets/Logos/AwarriLogo/Group.png";
 
 const Footer = () => {
   return (
-    <div className=" flex justify-between font-[gilroy-regular] text-[12px] px-8 py-10 flex-wrap text-[#49494B]">
-      <p>@2024 LangEasy. All Rights Reserved</p>
+    <div className=" flex justify-between flex-col gap-2 font-[gilroy-medium] sm:items-center sm:flex-row text-[12px] text-[#49494B] font-normal px-8 border-t-2 border-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF] h-max">
+      <p className=" text-center">@2024 LangEasy. All Rights Reserved</p>
 
-      <span className=" flex flex-wrap gap-7">
-        <p>About</p>
-        <p>Terms of Use</p>
-        <p>Privacy Policy</p>
-      </span>
+      <ul className=" justify-between flex flex-col md:flex-row sm:flex-row md:gap-7 gap-1 items-center">
+        <li>About</li>
+        <li>Terms of Use</li>
+        <li>Privacy Policy</li>
+      </ul>
 
-      <span className=" flex flex-wrap">
+      <span className=" flex items-center justify-end gap-2 ">
         <p>Powered by</p>
-        <img src={AwarriLogo} alt="" className=" w-[3.125rem] h-[1.3125rem]" />
+        <img
+          src={AwarriLogo}
+          alt=""
+          className=" w-[3.125rem] h-[1.3125rem] object-contain"
+        />
       </span>
     </div>
   );

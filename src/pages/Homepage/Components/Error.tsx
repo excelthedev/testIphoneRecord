@@ -5,7 +5,6 @@ import { ROUTES } from "../../../utils/routes";
 
 const Error = () => {
   const navigate = useNavigate();
-  //Testing husky
   return (
     <div className=" gap-3 grid max-h-[100svh] my-5 text-[#333333] place-content-center">
       <div className="flex flex-col justify-center text-center">
