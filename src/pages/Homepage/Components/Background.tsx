@@ -1,12 +1,11 @@
 import { Card } from "antd";
 import Footer from "../../../assets/Logos/AwarriLogo/Footer";
 import LangEasyLogo from "../../../assets/Logos/LangeasyLogo/LangEasyLogo";
-// import WavIcon from "../../../assets/icons/WavIcon.png";
 import ArrowIcon from "../../../assets/icons/ArrowIcon";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../utils/routes";
 import { useEffect } from "react";
-// import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import WelcomeText from "./WelcomeText";
 
 const Background: React.FC = () => {
@@ -28,19 +27,16 @@ const Background: React.FC = () => {
           <LangEasyLogo />
         </div>
         <div className="flex flex-col gap-8 justify-around sm:flex-row items-center">
-          {/* <motion.img
+          <motion.div
+            className=""
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ ease: "easeInOut", duration: 1.0 }}
-            src={WavIcon}
-            className="w-[30%]"
-            alt="icon"
-            loading="lazy"
-          /> */}
-          <WelcomeText />
+          >
+            <WelcomeText />
+          </motion.div>
           <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full  md:py-3 ">
-            {location.pathname !== '/' && (
-
+            {location.pathname !== "/" && (
               <ArrowIcon
                 className="cursor-pointer "
                 onClick={() => {
