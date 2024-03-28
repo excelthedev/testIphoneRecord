@@ -14,7 +14,7 @@ const LangEasyLogo = () => {
     >
       <img
         src={logo}
-        className=" w-[12rem] h-11 object-contain"
+        className=" w-[5rem] md:w-[12rem] h-11 object-contain"
         alt="logo"
         loading="lazy"
       />

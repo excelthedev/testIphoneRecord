@@ -45,7 +45,7 @@ const Dashboard = () => {
   }, [data, dispatch, userInfo?._id]);
 
   return (
-    <div className=" min-h-[100svh] bg-[#F7F8FA] p-10">
+    <div className=" min-h-[100svh] bg-[#F7F8FA] md:p-10 p-5">
       <Header
         email={userInfo?.email ?? ""}
         firstname={userInfo?.firstname ?? ""}
@@ -89,18 +89,15 @@ const Dashboard = () => {
           <span>and read the sentence aloud in the displayed language</span>
         </span>
         <SentenceBank />
-        <div className="mt-10 w-[80%] sm:w-[60%] mx-auto">
+        <div className="mt-10 w-[80%] sm:w-[60%] mx-auto relative">
           <hr />
-          <div className="flex items-center justify-center">
-            <span className="w-16 h-16 rounded-[50%] bg-[#096A95] flex justify-center items-center ">
-              <MicIcon />
-            </span>
-          </div>
+          <span className="p-3 sm:p-4 rounded-[50%] bg-[#096A95] flex justify-center items-center absolute right-[50%] top-[-20px] ">
+            <MicIcon />
+          </span>
         </div>
-        <div className="flex justify-end gap-5 mt-10">
+        <div className="flex justify-center gap-5 mt-10 md:justify-end">
           <Button className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4">
-            {" "}
-            Skip {">>"}{" "}
+            Skip {">>"}
           </Button>
           <Button className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5">
             Save
