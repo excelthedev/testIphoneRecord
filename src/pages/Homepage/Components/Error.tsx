@@ -13,15 +13,9 @@ const Error = () => {
           This page doesn’t exist
         </p>
       </div>
-
       <div className="flex justify-center">
-        <img
-          src={Error404}
-          alt=""
-          className=" w-[44.5rem] object-contain "
-        />
+        <img src={Error404} alt="" className=" w-[44.5rem] object-contain " />
       </div>
-
       <div
         className="flex items-center justify-center gap-3"
         onClick={() => {

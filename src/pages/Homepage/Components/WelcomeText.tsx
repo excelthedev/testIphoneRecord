@@ -7,17 +7,17 @@ const welcomeIcons = [
   {
     logo: 'wave',
     icon: <Audio />,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   {
-    logo: 'mic',
+    logo: "mic",
     icon: <Mic />,
-    backgroundColor: '#096A95',
+    backgroundColor: "#096A95",
   },
   {
-    logo: 'translate',
+    logo: "translate",
     icon: <Translate />,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
 ];
 
@@ -49,13 +49,13 @@ const WelcomeText: React.FC = () => {
                 key={index}
                 style={{
                   backgroundColor: item.backgroundColor,
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '50%',
-                  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 {item.icon}
