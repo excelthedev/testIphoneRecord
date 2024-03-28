@@ -27,14 +27,14 @@ const Background: React.FC = () => {
           <LangEasyLogo />
         </div>
         <div className="flex flex-col gap-8 justify-around sm:flex-row items-center">
-          <motion.div
+          {/* <motion.div
             className=""
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ ease: "easeInOut", duration: 1.0 }}
           >
-            <WelcomeText />
-          </motion.div>
+          </motion.div> */}
+          <WelcomeText />
           <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full  md:py-3 ">
             {location.pathname !== "/" && (
               <ArrowIcon
