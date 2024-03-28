@@ -5,6 +5,7 @@ import { ROUTES } from "../../../utils/routes";
 
 const Error = () => {
   const navigate = useNavigate();
+  //Testing husky
   return (
     <div className=" gap-3 grid max-h-[100svh] my-5 text-[#333333] place-content-center">
       <div className="flex flex-col justify-center text-center">
@@ -13,15 +14,9 @@ const Error = () => {
           This page doesn’t exist
         </p>
       </div>
-
       <div className="flex justify-center">
-        <img
-          src={Error404}
-          alt=""
-          className=" w-[44.5rem] object-contain "
-        />
+        <img src={Error404} alt="" className=" w-[44.5rem] object-contain " />
       </div>
-
       <div
         className="flex items-center justify-center gap-3"
         onClick={() => {

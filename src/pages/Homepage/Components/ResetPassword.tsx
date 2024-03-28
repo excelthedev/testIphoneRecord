@@ -41,9 +41,6 @@ const ResetPassword = () => {
         error(apiResponse.responseMessage);
       }
     }
-    // if (result.isError) {
-    //   error(result.error?.data?.responseMessage);
-    // }
   }, [result]);
 
   return (
