@@ -37,5 +37,5 @@ FROM node:18-slim
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/dist /usr/src/app/dist
 RUN npm install -g serve
-CMD ["serve", "-s", "dist", "-l", "4000"]
-EXPOSE 4000
+CMD ["serve", "-s", "dist", "-l", "8080"]
+EXPOSE 8080
