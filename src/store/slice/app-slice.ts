@@ -10,6 +10,7 @@ const initialState: State.AppState = {
   getPostUrl: "",
   updateUrl: "",
   deleteUrl: "",
+  currentStep: 1,
 };
 const appSlice = createSlice({
   name: "appSlice",

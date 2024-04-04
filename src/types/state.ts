@@ -3,8 +3,6 @@ import { FORM_ACTION } from "../utils/helpers";
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace State {
   export interface AppState {
-    selectedWord?: string;
-    loadedWords?: [];
     selectedWordMeaning?: string;
     selectedLanguage?: string;
     request: any;
@@ -18,9 +16,8 @@ export namespace State {
     uploadUrl?: string;
     getPostUrl?: string;
     deleteUrl: string;
-    showModal?: boolean;
     userId?: string;
-    savedRecords?:[];
+    currentStep: number;
   }
   export class ModalProps {
     openModal?: boolean;
