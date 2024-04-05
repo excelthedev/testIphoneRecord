@@ -6,11 +6,15 @@ import Speak from "../../../assets/icons/Speak";
 import StopRecordingSmallIcon from "../../../assets/icons/StopRecordingSmallIcon";
 import TranslateIconSmall from "../../../assets/icons/TranslateIconSmall";
 import TranslateLargeIcon from "../../../assets/icons/TranslateLargeIcon";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import RecorderLine from "../../../assets/svgs/recorder-line.svg";
 import stopRecordingIcon from "../../../assets/svgs/stop-recording.svg";
 import playRecordingIcon from "../../../assets/svgs/play-recording.svg";
 import pauseRecordeing from "../../../assets/svgs/pause-recording.svg";
+import { setAllAppState, useGetDataQuery } from "../../../store";
+import { endpoints } from "../../../store/api/endpoints";
+import { State } from "../../../types/state";
+import React from "react";
 
 type Props = {
   isRecording: boolean;
@@ -24,6 +28,7 @@ type Props = {
   waveformRef: any;
   currentTime: number;
   formatTime?: (currentTime: number) => string;
+  userId: string | undefined;
 };
 
 const AudioAnnotationSteps: React.FC<Props> = ({
@@ -38,10 +43,22 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   currentTime,
   waveformRef,
   formatTime,
+  userId,
 }) => {
+  const dispatch = useAppDispatch();
   const state = useAppSelector((state) => {
     return state.app;
   });
+  const { data } = useGetDataQuery({
+    getUrl: `${endpoints.getUserTasks}/${userId}`,
+  });
+  React.useEffect(() => {
+    if (data?.data) {
+      dispatch(setAllAppState({ ...state, allDialogs: data?.data }));
+      //   dispatch(setAllAppState({ ...state, currentDialog: data?.data[1] }));
+    }
+  }, [data?.data, dispatch]);
+
   return (
     <div>
       {state.currentStep !== 2 && (
@@ -68,12 +85,17 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>the displayed sentence in the language of your choosing</span>
         </span>
       )}
-      <div className=" mt-2 sm:w-[60%] p-3 text-center mx-auto bg-white rounded-2xl border border-[#E3E6EA]">
-        <p className="text-[#333333] font-[gilroy-medium] text-sm md:text-xl font-normal">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi velit
-          ipsam, animi molestiae, neque tempore aliquid in saepe, ex enim
-          voluptas at quod? Maxime veniam autem cumque voluptatum, nemo amet.
-        </p>
+      <div className="flex items-center space-between sm:w-[60%] mx-auto">
+        <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
+          <p className="text-center flex-grow w-full text-[#333333] font-[gilroy-bold] text-2xl">
+            {state.allDialogs[1]?.text}
+          </p>
+        </div>
+        {/* <div className=" mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
+          <p className="opacity-50 ">
+            {data?.data[state.currentDialog + 1]?.text}
+          </p>
+        </div> */}
       </div>
       {state.currentStep === 1 && (
         <div className="">

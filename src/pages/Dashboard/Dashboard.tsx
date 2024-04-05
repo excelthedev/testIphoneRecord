@@ -2,27 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { setAllAppState, useGetDataQuery } from "../../store";
 import Header from "./components/Header";
 import { endpoints } from "../../store/api/endpoints";
-import { Input, Progress, Select } from "antd";
+import { Progress } from "antd";
 import { userInfoObject } from "./components/Header";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Recording from "../../assets/icons/Recording";
 import Translate from "../../assets/icons/Translate";
-import Speak from "../../assets/icons/Speak";
 import Button from "../../components/Button";
 import Footer from "../Homepage/Components/Footer";
 import WaveSurfer from "wavesurfer.js";
-import DeleteIcon from "../../assets/icons/DeleteIcon";
-import RecorderLine from "../../assets/svgs/recorder-line.svg";
-import MicIconLarge from "../../assets/icons/MicIconLarge";
-import stopRecordingIcon from "../../assets/svgs/stop-recording.svg";
-import playRecordingIcon from "../../assets/svgs/play-recording.svg";
-import pauseRecordeing from "../../assets/svgs/pause-recording.svg";
-import RefreshIcon from "../../assets/icons/RefreshIcon";
-import StopRecordingSmallIcon from "../../assets/icons/StopRecordingSmallIcon";
-import TranslateIconSmall from "../../assets/icons/TranslateIconSmall";
 import RecordingTransparentIcon from "../../assets/icons/RecordingTransparentIcon";
 import TranslateIconWithBg from "../../assets/icons/TranslateIconWithBg";
-import TranslateLargeIcon from "../../assets/icons/TranslateLargeIcon";
 import AudioAnnotationSteps from "./components/AudioAnnotationSteps";
 
 const Dashboard = () => {
@@ -179,7 +168,7 @@ const Dashboard = () => {
         _id={userInfo?._id ?? ""}
       />
 
-      <section className=" min-h-[80svh]">
+      <section className=" min-h-[80svh] ">
         <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
           <div className="flex gap-5 h-max">
             <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
@@ -439,6 +428,7 @@ const Dashboard = () => {
           stopRecording={stopRecording}
           togglePlayPause={togglePlayPause}
           waveformRef={waveformRef}
+          userId={userInfo?._id}
         />
         <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
           <Button className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4">

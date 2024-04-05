@@ -11,6 +11,7 @@ const initialState: State.AppState = {
   updateUrl: "",
   deleteUrl: "",
   currentStep: 1,
+  allDialogs: [],
 };
 const appSlice = createSlice({
   name: "appSlice",

@@ -7,10 +7,11 @@ export const endpoints = {
     resetPassword: "users/resetpassword",
     logout: "users/logout",
   },
+  getUserTasks: "dialogue/getusertasks",
   getWords: "word",
   user: {
     getUserInfo: "users/getuser",
   },
   saveRecording: "audio/create",
-  suggestWord: 'feedback/create',
+  suggestWord: "feedback/create",
 };

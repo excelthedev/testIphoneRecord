@@ -18,6 +18,8 @@ export namespace State {
     deleteUrl: string;
     userId?: string;
     currentStep: number;
+    currentDialog?: Tasks;
+    allDialogs: Tasks[];
   }
   export class ModalProps {
     openModal?: boolean;
@@ -34,5 +36,13 @@ export namespace State {
     closable?: boolean;
     closeIcon?: any;
     className?: string;
+  }
+  export class Tasks {
+    text?: string;
+    dialogueId?: string;
+    assignmentStatus?: boolean;
+    skippedStatus?: boolean;
+    __v?: number;
+    taskStage?: number;
   }
 }
