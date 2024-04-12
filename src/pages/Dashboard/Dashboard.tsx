@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { setAllAppState, useGetDataQuery } from "../../store";
 import Header from "./components/Header";
 import { endpoints } from "../../store/api/endpoints";
-import { Progress } from "antd";
+import { Progress, Spin } from "antd";
 import { userInfoObject } from "./components/Header";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Recording from "../../assets/icons/Recording";
@@ -136,6 +136,13 @@ const Dashboard = () => {
     resetRecording();
     startRecording();
   };
+  const {
+    data: dialogData,
+    isFetching,
+    isLoading,
+  } = useGetDataQuery({
+    getUrl: `${endpoints.getUserTasks}/${userInfo?._id}`,
+  });
 
   useEffect(() => {
     // if (sessionStorage.getItem(import.meta.env.VITE_APP_USER_INFO)) {
@@ -167,52 +174,52 @@ const Dashboard = () => {
         lastname={userInfo?.lastname ?? ""}
         _id={userInfo?._id ?? ""}
       />
+      <Spin spinning={isLoading || isFetching}>
+        <section className=" min-h-[80svh] ">
+          <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
+            <div className="flex gap-5 h-max">
+              <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
+                {dialogData?.data[1]?.taskStage === 1 ? (
+                  <Recording />
+                ) : (
+                  <RecordingTransparentIcon />
+                )}
 
-      <section className=" min-h-[80svh] ">
-        <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
-          <div className="flex gap-5 h-max">
-            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-              {state.currentStep === 1 ? (
-                <Recording />
-              ) : (
-                <RecordingTransparentIcon />
-              )}
+                <p className="hidden sm:block">Record</p>
+              </span>
+              <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
+                {dialogData?.data[1]?.taskStage === 2 ? (
+                  <TranslateIconWithBg />
+                ) : (
+                  <Translate />
+                )}
 
-              <p className="hidden sm:block">Record</p>
-            </span>
-            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-              {state.currentStep === 2 ? (
-                <TranslateIconWithBg />
-              ) : (
-                <Translate />
-              )}
-
-              <p className="hidden sm:block">Translate</p>
-            </span>
-            <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-              {state.currentStep === 3 ? (
-                <Recording />
-              ) : (
-                <RecordingTransparentIcon />
-              )}
-              <p className="hidden sm:block"> Speak</p>
-            </span>
+                <p className="hidden sm:block">Translate</p>
+              </span>
+              <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
+                {dialogData?.data[1]?.taskStage === 3 ? (
+                  <Recording />
+                ) : (
+                  <RecordingTransparentIcon />
+                )}
+                <p className="hidden sm:block"> Speak</p>
+              </span>
+            </div>
+            <div className=" text-[#333333] md:w-[70%] gap-3 w-full ">
+              <span className="flex items-center justify-between text-sm">
+                <p>Total Task</p>
+                <p>50</p>
+              </span>
+              <span className="flex">
+                <p className="text-3xl ">14</p>
+                <p className="text-3xl ">/</p>
+                <p className="text-base align-text-bottom">50</p>
+              </span>
+              <Progress percent={70} showInfo={false} />
+            </div>
           </div>
-          <div className=" text-[#333333] md:w-[70%] gap-3 w-full ">
-            <span className="flex items-center justify-between text-sm">
-              <p>Total Task</p>
-              <p>50</p>
-            </span>
-            <span className="flex">
-              <p className="text-3xl ">14</p>
-              <p className="text-3xl ">/</p>
-              <p className="text-base align-text-bottom">50</p>
-            </span>
-            <Progress percent={70} showInfo={false} />
-          </div>
-        </div>
 
-        {/* {(state.currentStep === 1 || 3) && !isRecording && (
+          {/* {(state.currentStep === 1 || 3) && !isRecording && (
           <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
             <span className="flex items-center justify-center">
               Click <Speak />
@@ -416,39 +423,44 @@ const Dashboard = () => {
             )}
           </div>
         )} */}
-        <AudioAnnotationSteps
-          audioUrl={audioUrl}
-          currentTime={currentTime}
-          // formatTime={formatTime()}
-          handleRestartRecording={handleRestartRecording}
-          isPlaying={isPlaying}
-          isRecording={isRecording}
-          resetRecording={resetRecording}
-          startRecording={startRecording}
-          stopRecording={stopRecording}
-          togglePlayPause={togglePlayPause}
-          waveformRef={waveformRef}
-          userId={userInfo?._id}
-        />
-        <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
-          <Button className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4">
-            Skip {">>"}
-          </Button>
-          <Button
-            className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5"
-            onClick={() => {
-              if (state.currentStep == 3) {
-                return;
-              }
-              dispatch(
-                setAllAppState({ ...state, currentStep: state.currentStep + 1 })
-              );
-            }}
-          >
-            Save
-          </Button>
-        </div>
-      </section>
+          <AudioAnnotationSteps
+            audioUrl={audioUrl}
+            currentTime={currentTime}
+            // formatTime={formatTime()}
+            handleRestartRecording={handleRestartRecording}
+            isPlaying={isPlaying}
+            isRecording={isRecording}
+            resetRecording={resetRecording}
+            startRecording={startRecording}
+            stopRecording={stopRecording}
+            togglePlayPause={togglePlayPause}
+            waveformRef={waveformRef}
+            userId={userInfo?._id}
+            data={dialogData}
+          />
+          <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
+            <Button className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4">
+              Skip {">>"}
+            </Button>
+            <Button
+              className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5"
+              onClick={() => {
+                if (state.currentStep === 3) {
+                  return;
+                }
+                dispatch(
+                  setAllAppState({
+                    ...state,
+                    currentStep: state.currentStep + 1,
+                  })
+                );
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </section>
+      </Spin>
       <Footer />
     </div>
   );

@@ -29,6 +29,7 @@ type Props = {
   currentTime: number;
   formatTime?: (currentTime: number) => string;
   userId: string | undefined;
+  data: any;
 };
 
 const AudioAnnotationSteps: React.FC<Props> = ({
@@ -44,24 +45,11 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   waveformRef,
   formatTime,
   userId,
+  data,
 }) => {
-  const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => {
-    return state.app;
-  });
-  const { data } = useGetDataQuery({
-    getUrl: `${endpoints.getUserTasks}/${userId}`,
-  });
-  React.useEffect(() => {
-    if (data?.data) {
-      dispatch(setAllAppState({ ...state, allDialogs: data?.data }));
-      //   dispatch(setAllAppState({ ...state, currentDialog: data?.data[1] }));
-    }
-  }, [data?.data, dispatch]);
-
   return (
     <div>
-      {state.currentStep !== 2 && (
+      {data?.data[1]?.taskStage !== 2 && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
@@ -69,7 +57,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>and read the sentence aloud in the displayed language</span>
         </span>
       )}
-      {(state.currentStep === 1 || 3) && isRecording && (
+      {(data?.data[1]?.taskStage === 1 || 3) && isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <StopRecordingSmallIcon />
@@ -77,7 +65,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>when you’re done recording</span>
         </span>
       )}
-      {state.currentStep === 2 && (
+      {data?.data[1]?.taskStage === 2 && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center gap-2 mr-2">
             Translate <TranslateIconSmall />
@@ -88,7 +76,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       <div className="flex items-center space-between sm:w-[60%] mx-auto">
         <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
           <p className="text-center flex-grow w-full text-[#333333] font-[gilroy-bold] text-2xl">
-            {state.allDialogs[1]?.text}
+            {data?.data[1]?.text}
           </p>
         </div>
         {/* <div className=" mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
@@ -97,7 +85,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           </p>
         </div> */}
       </div>
-      {state.currentStep === 1 && (
+      {data?.data[1]?.taskStage === 1 && (
         <div className="">
           {!isRecording && !audioUrl && (
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto  relative">
@@ -158,7 +146,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           )}
         </div>
       )}
-      {state.currentStep === 2 && (
+      {data?.data[1]?.taskStage === 2 && (
         <div className="w-[80%] sm:w-[60%] mx-auto my-3 bg-white p-4 rounded-2xl">
           <span className="flex items-center justify-between mb-4">
             <Select
@@ -179,7 +167,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           ></Input.TextArea>
         </div>
       )}
-      {state.currentStep === 3 && (
+      {data?.data[1]?.taskStage === 3 && (
         <div className="">
           {!isRecording && !audioUrl && (
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
