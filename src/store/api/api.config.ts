@@ -52,7 +52,7 @@ export const globalApi = createApi({
   baseQuery: baseQueryWithReauth(baseQuery),
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
-  tagTypes: ["GetData"],
+  tagTypes: ["GetData","GetDialogueData"],
   endpoints: (builder) => ({
     getData: builder.query({
       query: (data) => {
@@ -62,6 +62,14 @@ export const globalApi = createApi({
       },
       providesTags: ["GetData"],
     }),
+    getDialogueData: builder.query({
+      query: (data) => {
+        return {
+          url: data.getUrl,
+        };
+      },
+      providesTags: ["GetDialogueData"],
+    }),
     getDataOnClick: builder.query({
       query: (data) => {
         return {
@@ -69,7 +77,6 @@ export const globalApi = createApi({
         };
       },
     }),
-
     postData: builder.mutation({
       query: (data: State.AppState | any) => {
         return {
@@ -78,9 +85,9 @@ export const globalApi = createApi({
           body: data.request,
         };
       },
-      // invalidatesTags: (_result, _error, arg) => [
-      //   { type: "GetData", id: arg.id },
-      // ],
+      invalidatesTags: (_result, _error, arg) => [
+      { type: "GetDialogueData", id: arg.id }
+      ],
     }),
     updateData: builder.mutation({
       query: (data: State.AppState | any) => {
@@ -116,6 +123,8 @@ export const globalApi = createApi({
 });
 export const {
   useGetDataQuery,
+  useGetDialogueDataQuery,
+  useLazyGetDialogueDataQuery,
   useLazyGetDataQuery,
   usePostDataMutation,
   useGetDataOnClickQuery,
