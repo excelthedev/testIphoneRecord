@@ -86,13 +86,14 @@ const AudioAnnotationSteps: React.FC<Props> = ({
         </div> */}
       </div>
       {data?.data[1]?.taskStage === 1 && (
-        <div className="">
+        <div className="w-full ">
           {!isRecording && !audioUrl && (
-            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto  relative">
-              <img src={RecorderLine} alt="" />
+            <div className="mt-[5rem] w-full mx-auto  relative">
+              <img src={RecorderLine} alt="" className="mx-auto" />
               <button
                 onClick={startRecording}
-                className=" rounded-[50%] flex justify-center items-center absolute -translate-x-1/2  transform left-1/2  top-[-30px]"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2"
+                // className=" rounded-[50%] flex justify-center items-center absolute -translate-x-1/2  transform left-1/2  top-[-30px]"
               >
                 <MicIconLarge className="shadow-xl" />
               </button>
@@ -179,7 +180,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"English"}>English</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
               </Select>
-              <div className=" relative  p-6">
+              <div className="relative p-6 ">
                 <img src={RecorderLine} alt="" />
                 <button
                   onClick={startRecording}
@@ -201,7 +202,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
               </Select>
 
-              <div className="relative  p-6">
+              <div className="relative p-6">
                 <img src={RecorderLine} alt="" />
                 <button
                   onClick={stopRecording}
