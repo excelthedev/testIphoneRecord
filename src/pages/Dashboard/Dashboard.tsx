@@ -18,7 +18,7 @@ import RecordingTransparentIcon from "../../assets/icons/RecordingTransparentIco
 import TranslateIconWithBg from "../../assets/icons/TranslateIconWithBg";
 import AudioAnnotationSteps from "./components/AudioAnnotationSteps";
 import { useToast } from "../../hooks/useToast";
-import { useGetDialogueDataQuery, useLazyGetDialogueDataQuery } from "../../store/api/api.config";
+import { useGetDialogueDataQuery } from "../../store/api/api.config";
 
 const Dashboard = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -193,11 +193,6 @@ const Dashboard = () => {
         lastname={userInfo?.lastname ?? ""}
         _id={userInfo?._id ?? ""}
       />
-
-
-
-
-      
       <Spin spinning={isLoading || isFetching || result.isLoading}>
         <section className=" min-h-[80svh] ">
           <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
