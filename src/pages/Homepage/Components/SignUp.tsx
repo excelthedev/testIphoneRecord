@@ -24,6 +24,7 @@ import { useToast } from "../../../hooks/useToast";
 import GrayChecker from "../../../assets/icons/GrayChecker";
 import GreenChecker from "../../../assets/icons/GreenChecker";
 import RedChecker from "../../../assets/icons/RedChecker";
+import { useGetDataQuery } from "../../../store/api/api.config";
 
 type statesType = {
   id: number;
@@ -32,6 +33,12 @@ type statesType = {
 }[];
 
 const SignUp = () => {
+  
+
+  const { data } = useGetDataQuery({
+    getUrl: endpoints.auth.accent,
+  });
+
   const [states, setStates] = useState<statesType>([]);
 
   const state = useAppSelector((state) => {
@@ -45,9 +52,9 @@ const SignUp = () => {
   const [openSuccessModal, setOpenSuccessModal] = useState<boolean>(false);
   const [getStatesLoading, setGetStatesIsLoading] = useState<boolean>(false);
 
-  // eslint-disable-next-line arrow-body-style
+  
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-    // Can not select days after today and today
+  
     return current && current > dayjs().startOf("day");
   };
   const { onAuthPostData, result } = useAuthPostData();
@@ -122,7 +129,7 @@ const SignUp = () => {
           <RedChecker />
         ),
     },
-    ///[A-Z]/
+  
     {
       text: "Contains a lowercase letter",
       img:
@@ -157,8 +164,8 @@ const SignUp = () => {
         ) : state?.request?.password === undefined ? (
           <GrayChecker />
         ) : state?.request?.password.match(
-            /[`!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?~ ]/
-          ) ? (
+          /[`!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?~ ]/
+        ) ? (
           <GreenChecker />
         ) : (
           <RedChecker />
@@ -169,7 +176,7 @@ const SignUp = () => {
     <div className="grid gap-3">
       {contentData.map((item, index) => (
         <span key={index} className="flex items-center gap-3">
-          {/* <img src={item.img} className="w-[1.50rem]" alt="checker-img" /> */}
+      
           {item.img}
           <p>{item.text}</p>
         </span>
@@ -221,10 +228,7 @@ const SignUp = () => {
             name: "accent",
             value: state.request?.accent,
           },
-          // {
-          //   name: "stateOfOrigin",
-          //   value: state.request?.stateOfOrigin,
-          // },
+       
           {
             name: "tribe",
             value: state.request?.tribe,
@@ -293,7 +297,7 @@ const SignUp = () => {
           ]}
         >
           <Input
-             className="w-full py-4 rounded-xl placeholder:font-[gilroy-regular] placeholder:font-normal placeholder:text-[#666666] placeholder:text-base"
+            className="w-full py-4 rounded-xl placeholder:font-[gilroy-regular] placeholder:font-normal placeholder:text-[#666666] placeholder:text-base"
             placeholder="Enter your email address"
             onChange={(e) => {
               setRequest("email", e.target.value);
@@ -347,7 +351,7 @@ const SignUp = () => {
             </span>
           }
           name={"gender"}
-          // rules={[{ required: true, message: "Gender is required" }]}
+        
         >
           <Radio.Group
             onChange={(e) => {
@@ -388,61 +392,25 @@ const SignUp = () => {
           />
         </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
-              Accent
-            </span>
-          }
-          rules={[{ required: true, message: "Accent is required" }]} name={"accent"}
-        >
-          <Select
-            placeholder="Select your Accent"
-            onChange={(e) => {
-              setRequest("accent", e);
-            }}
-          >
-            <Select.Option>Select your Accent</Select.Option>
-            <Select.Option value="yoruba">Accent 1</Select.Option>
-            <Select.Option value="hausa">Accent 2</Select.Option>
-            <Select.Option value="igbo">Accent 3</Select.Option>
-          </Select>
-        </Form.Item>
-
-        {/* <Form.Item
-          label={
-            <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
-              State
-            </span>
-          }
-          name={"stateOfOrigin"}
-          rules={[{ required: true, message: "State of origin is required" }]}
-        >
-          <Select
-            placeholder="Select  State"
-            onChange={(e) => {
-              setRequest("stateOfOrigin", e);
-            }}
-            loading={getStatesLoading}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-            value={state.request?.stateOfOrigin}
-            options={
-              getStatesLoading
-                ? []
-                : Array.isArray(states)
-                ? states.map((item) => {
-                    return {
-                      label: item.name,
-                      value: item.name,
-                    };
-                  })
-                : []
-            }
-          />
-        </Form.Item> */}
+        <Form.Item 
+  label={<span className="text-[#333333] text-base font-[gilroy-medium] font-normal">Accent</span>} 
+  name="accent"
+  rules={[{ required: true, message: 'Please select your accent' }]}
+>
+  <Select 
+    placeholder="Select your accent"
+    onChange={(value) => {
+      console.log(value);
+      setRequest("accent", value);
+    }}
+  >
+    {data?.data.map((accent:string, index:number) => (
+      <Select.Option key={index} value={accent}>
+        {accent}
+      </Select.Option>
+    ))}
+  </Select>
+</Form.Item>
 
         <Form.Item
           label={
@@ -492,7 +460,6 @@ const SignUp = () => {
         >
           <div className="flex items-center justify-center w-full gap-4">
             <Checkbox
-              // name={"consent"}
               id="accept"
               onChange={(e) => {
                 setRequest("consent", e.target.checked);
@@ -530,16 +497,6 @@ const SignUp = () => {
             Log in
           </span>
         </p>
-        {/* <div className="flex items-center justify-between w-full my-5">
-          <hr className="w-full border border-[#E3E6EA]" />
-          <p className="w-full text-center text-[#333333] font-normal text-lg font-[gilroy-regular]">
-            Or continue with
-          </p>
-          <hr className="w-full border border-[#E3E6EA]" />
-        </div> */}
-        {/* <div className="flex justify-center">
-          <GoogleIcon className="cursor-pointer" />
-        </div> */}
       </Form>
     </div>
   );

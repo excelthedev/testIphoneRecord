@@ -6,6 +6,8 @@ export const endpoints = {
     forgotPassword: "users/forgotpassword",
     resetPassword: "users/resetpassword",
     logout: "users/logout",
+    accent: "users/getaccent"
+
   },
   getUserTasks: "dialogue/getusertasks",
   getWords: "word",
