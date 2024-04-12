@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { setAllAppState, useGetDataQuery } from "../../store";
+import {
+  setAllAppState,
+  useGetDataQuery,
+  usePostDataMutation,
+} from "../../store";
 import Header from "./components/Header";
 import { endpoints } from "../../store/api/endpoints";
 import { Progress, Spin } from "antd";
@@ -13,6 +17,7 @@ import WaveSurfer from "wavesurfer.js";
 import RecordingTransparentIcon from "../../assets/icons/RecordingTransparentIcon";
 import TranslateIconWithBg from "../../assets/icons/TranslateIconWithBg";
 import AudioAnnotationSteps from "./components/AudioAnnotationSteps";
+import { useToast } from "../../hooks/useToast";
 
 const Dashboard = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -26,6 +31,8 @@ const Dashboard = () => {
   const { data } = useGetDataQuery({
     getUrl: endpoints.user.getUserInfo,
   });
+
+  const [handleSkiptask, result] = usePostDataMutation();
 
   const [userInfo, setUserInfo] = useState<userInfoObject>();
   const dispatch = useAppDispatch();
@@ -141,11 +148,26 @@ const Dashboard = () => {
     isFetching,
     isLoading,
   } = useGetDataQuery({
-    getUrl: `${endpoints.getUserTasks}/${userInfo?._id}`,
+    getUrl: `${endpoints.getSingleTask}/${userInfo?._id}`,
   });
 
+  const { error, success } = useToast();
+
   useEffect(() => {
-    // if (sessionStorage.getItem(import.meta.env.VITE_APP_USER_INFO)) {
+    if ("data" in result) {
+      const apiResponse = result?.data;
+      if (apiResponse.responseCode === 200) {
+        success(apiResponse.responseMessage);
+      } else {
+        error(apiResponse.responseMessage);
+      }
+    }
+    if (result.isError) {
+      error("Something went Wrong!");
+    }
+  }, [result, dialogData]);
+
+  useEffect(() => {
     const loginResponse = data?.data;
 
     loginResponse && setUserInfo(loginResponse);
@@ -160,10 +182,6 @@ const Dashboard = () => {
           },
         })
       );
-
-    // } else {
-    //   window.location.href = ROUTES.HOMEPAGE;
-    // }
   }, [data, dispatch, userInfo?._id]);
 
   return (
@@ -174,12 +192,12 @@ const Dashboard = () => {
         lastname={userInfo?.lastname ?? ""}
         _id={userInfo?._id ?? ""}
       />
-      <Spin spinning={isLoading || isFetching}>
+      <Spin spinning={isLoading || isFetching || result.isLoading}>
         <section className=" min-h-[80svh] ">
           <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
             <div className="flex gap-5 h-max">
               <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-                {dialogData?.data[1]?.taskStage === 1 ? (
+                {dialogData?.data?.taskStage === 1 ? (
                   <Recording />
                 ) : (
                   <RecordingTransparentIcon />
@@ -188,7 +206,7 @@ const Dashboard = () => {
                 <p className="hidden sm:block">Record</p>
               </span>
               <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-                {dialogData?.data[1]?.taskStage === 2 ? (
+                {dialogData?.data?.taskStage === 2 ? (
                   <TranslateIconWithBg />
                 ) : (
                   <Translate />
@@ -197,7 +215,7 @@ const Dashboard = () => {
                 <p className="hidden sm:block">Translate</p>
               </span>
               <span className="md:py-2 md:px-4 p-2 bg-white text-[#19213D] rounded-xl flex justify-center cursor-pointer items-center w-max text-sm font-[gilroy-medium] gap-2">
-                {dialogData?.data[1]?.taskStage === 3 ? (
+                {dialogData?.data?.taskStage === 3 ? (
                   <Recording />
                 ) : (
                   <RecordingTransparentIcon />
@@ -235,7 +253,20 @@ const Dashboard = () => {
             data={dialogData}
           />
           <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
-            <Button className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4">
+            <Button
+              className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4"
+              onClick={() => {
+                handleSkiptask({
+                  ...state,
+                  postUrl: endpoints.skipTask,
+                  request: {
+                    userId: userInfo?._id,
+                    subDialogueId: dialogData?.data?.subDialogueId,
+                    taskId: dialogData?.data?.taskId,
+                  },
+                });
+              }}
+            >
               Skip {">>"}
             </Button>
             <Button

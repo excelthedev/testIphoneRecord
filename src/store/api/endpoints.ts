@@ -6,14 +6,15 @@ export const endpoints = {
     forgotPassword: "users/forgotpassword",
     resetPassword: "users/resetpassword",
     logout: "users/logout",
-    accent: "users/getaccent"
-
+    accent: "users/getaccent",
   },
   getUserTasks: "dialogue/getusertasks",
+  getSingleTask: "dialogue/getsingletask",
   getWords: "word",
   user: {
     getUserInfo: "users/getuser",
   },
   saveRecording: "audio/create",
   suggestWord: "feedback/create",
+  skipTask: "task/skip",
 };

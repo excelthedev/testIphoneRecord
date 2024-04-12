@@ -5,7 +5,6 @@ import ArrowIcon from "../../../assets/icons/ArrowIcon";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../utils/routes";
 import { useEffect } from "react";
-import { motion } from "framer-motion";
 import WelcomeText from "./WelcomeText";
 
 const Background: React.FC = () => {
@@ -23,7 +22,7 @@ const Background: React.FC = () => {
   return (
     <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative">
       <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] mx-4  overflow-hidden ">
-        <div className=" flex justify-start">
+        <div className="flex justify-start ">
           <LangEasyLogo />
         </div>
 

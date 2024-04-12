@@ -6,14 +6,11 @@ import Speak from "../../../assets/icons/Speak";
 import StopRecordingSmallIcon from "../../../assets/icons/StopRecordingSmallIcon";
 import TranslateIconSmall from "../../../assets/icons/TranslateIconSmall";
 import TranslateLargeIcon from "../../../assets/icons/TranslateLargeIcon";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import RecorderLine from "../../../assets/svgs/recorder-line.svg";
 import stopRecordingIcon from "../../../assets/svgs/stop-recording.svg";
 import playRecordingIcon from "../../../assets/svgs/play-recording.svg";
 import pauseRecordeing from "../../../assets/svgs/pause-recording.svg";
-import { setAllAppState, useGetDataQuery } from "../../../store";
-import { endpoints } from "../../../store/api/endpoints";
-import { State } from "../../../types/state";
+
 import React from "react";
 
 type Props = {
@@ -49,7 +46,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
 }) => {
   return (
     <div>
-      {data?.data[1]?.taskStage !== 2 && (
+      {data?.data?.taskStage !== 2 && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
@@ -57,7 +54,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>and read the sentence aloud in the displayed language</span>
         </span>
       )}
-      {(data?.data[1]?.taskStage === 1 || 3) && isRecording && (
+      {(data?.data?.taskStage === 1 || 3) && isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <StopRecordingSmallIcon />
@@ -65,7 +62,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>when you’re done recording</span>
         </span>
       )}
-      {data?.data[1]?.taskStage === 2 && (
+      {data?.data?.taskStage === 2 && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center gap-2 mr-2">
             Translate <TranslateIconSmall />
@@ -76,7 +73,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       <div className="flex items-center space-between sm:w-[60%] mx-auto">
         <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
           <p className="text-center flex-grow w-full text-[#333333] font-[gilroy-bold] text-2xl">
-            {data?.data[1]?.text}
+            {data?.data?.text}
           </p>
         </div>
         {/* <div className=" mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
@@ -85,7 +82,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           </p>
         </div> */}
       </div>
-      {data?.data[1]?.taskStage === 1 && (
+      {data?.data?.taskStage === 1 && (
         <div className="w-full ">
           {!isRecording && !audioUrl && (
             <div className="mt-[5rem] w-full mx-auto  relative">
@@ -147,7 +144,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           )}
         </div>
       )}
-      {data?.data[1]?.taskStage === 2 && (
+      {data?.data?.taskStage === 2 && (
         <div className="w-[80%] sm:w-[60%] mx-auto my-3 bg-white p-4 rounded-2xl">
           <span className="flex items-center justify-between mb-4">
             <Select
@@ -168,7 +165,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           ></Input.TextArea>
         </div>
       )}
-      {data?.data[1]?.taskStage === 3 && (
+      {data?.data?.taskStage === 3 && (
         <div className="">
           {!isRecording && !audioUrl && (
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
