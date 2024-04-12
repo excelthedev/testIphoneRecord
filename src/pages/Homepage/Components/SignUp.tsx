@@ -33,8 +33,6 @@ type statesType = {
 }[];
 
 const SignUp = () => {
-  
-
   const { data } = useGetDataQuery({
     getUrl: endpoints.auth.accent,
   });
@@ -52,9 +50,7 @@ const SignUp = () => {
   const [openSuccessModal, setOpenSuccessModal] = useState<boolean>(false);
   const [getStatesLoading, setGetStatesIsLoading] = useState<boolean>(false);
 
-  
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-  
     return current && current > dayjs().startOf("day");
   };
   const { onAuthPostData, result } = useAuthPostData();
@@ -129,7 +125,7 @@ const SignUp = () => {
           <RedChecker />
         ),
     },
-  
+
     {
       text: "Contains a lowercase letter",
       img:
@@ -164,8 +160,8 @@ const SignUp = () => {
         ) : state?.request?.password === undefined ? (
           <GrayChecker />
         ) : state?.request?.password.match(
-          /[`!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?~ ]/
-        ) ? (
+            /[`!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?~ ]/
+          ) ? (
           <GreenChecker />
         ) : (
           <RedChecker />
@@ -176,7 +172,6 @@ const SignUp = () => {
     <div className="grid gap-3">
       {contentData.map((item, index) => (
         <span key={index} className="flex items-center gap-3">
-      
           {item.img}
           <p>{item.text}</p>
         </span>
@@ -202,7 +197,20 @@ const SignUp = () => {
         scrollToFirstError={true}
         form={form}
         {...formConfig}
-        onFinish={() => onAuthPostData(endpoints.auth.register, state.request)}
+        onFinish={() =>
+          onAuthPostData(endpoints.auth.register, {
+            firstname: state.request?.firstname,
+            lastname: state.request?.lastname,
+            email: state.request?.email,
+            password: state.request?.password,
+            gender: state.request?.gender,
+            accent: state.request?.accent,
+            tribe: state.request?.tribe,
+            ethnicity: state.request?.ethnicity,
+            consent: state.request?.consent,
+            dateOfBirth: state.request?.dateOfBirth,
+          })
+        }
         fields={[
           {
             name: "firstname",
@@ -228,7 +236,6 @@ const SignUp = () => {
             name: "accent",
             value: state.request?.accent,
           },
-       
           {
             name: "tribe",
             value: state.request?.tribe,
@@ -347,11 +354,16 @@ const SignUp = () => {
         <Form.Item
           label={
             <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
-              What's your gender? (optional)
+              What's your gender?
             </span>
           }
+          rules={[
+            {
+              required: true,
+              message: "Gender is required",
+            },
+          ]}
           name={"gender"}
-        
         >
           <Radio.Group
             onChange={(e) => {
@@ -392,25 +404,28 @@ const SignUp = () => {
           />
         </Form.Item>
 
-        <Form.Item 
-  label={<span className="text-[#333333] text-base font-[gilroy-medium] font-normal">Accent</span>} 
-  name="accent"
-  rules={[{ required: true, message: 'Please select your accent' }]}
->
-  <Select 
-    placeholder="Select your accent"
-    onChange={(value) => {
-      console.log(value);
-      setRequest("accent", value);
-    }}
-  >
-    {data?.data.map((accent:string, index:number) => (
-      <Select.Option key={index} value={accent}>
-        {accent}
-      </Select.Option>
-    ))}
-  </Select>
-</Form.Item>
+        <Form.Item
+          label={
+            <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
+              Accent
+            </span>
+          }
+          name="accent"
+          rules={[{ required: true, message: "Please select your accent" }]}
+        >
+          <Select
+            placeholder="Select your accent"
+            onChange={(value) => {
+              setRequest("accent", value);
+            }}
+          >
+            {data?.data.map((accent: string, index: number) => (
+              <Select.Option key={index} value={accent}>
+                {accent}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item
           label={
@@ -461,6 +476,7 @@ const SignUp = () => {
           <div className="flex items-center justify-center w-full gap-4">
             <Checkbox
               id="accept"
+              checked={state.request?.consent === true}
               onChange={(e) => {
                 setRequest("consent", e.target.checked);
               }}
