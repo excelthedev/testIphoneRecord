@@ -20,8 +20,8 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: { "react/react-in-jsx-scope": "off", "react/jsx-uses-react": "off", 'no-unused-vars': 'error', // Error for unused variables
-    'no-extra-semi': 'error', // Error for extra semicolons
+  rules: { "react/react-in-jsx-scope": "off", "react/jsx-uses-react": "off", 'no-unused-vars': 'error', 
+    'no-extra-semi': 'error',
     'no-trailing-spaces': 'error',  },
   ignorePatterns: [
     "**/index.css",
