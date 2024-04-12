@@ -1,16 +1,24 @@
-const RefreshIcon = () => {
+const RefreshIcon = ({
+  className,
+  onClick,
+}: {
+  className?: string;
+  onClick?: () => void;
+}) => {
   return (
     <svg
-      width="15"
-      height="14"
-      viewBox="0 0 15 14"
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      onClick={onClick}
     >
       <path
-        d="M2.9922 2.49221C0.5026 4.98181 0.5026 9.01821 2.9922 11.5078C5.48179 13.9974 9.5182 13.9974 12.0078 11.5078C14.4974 9.01821 14.4974 4.98181 12.0078 2.49221C11.4505 1.93491 10.8157 1.50237 10.138 1.19453M13.875 0.624853H10.7974C10.3118 0.624853 9.91811 1.01852 9.91811 1.50416V4.58175"
-        stroke="#19213D"
-        strokeWidth="1.2"
+        d="M19.0092 1V4.13219C19.0092 4.42605 18.6418 4.55908 18.4537 4.33333C16.6226 2.2875 13.9617 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21C16.5228 21 21 16.5228 21 11"
+        stroke="#21272A"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

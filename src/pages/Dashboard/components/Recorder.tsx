@@ -85,7 +85,6 @@ const Recorder = () => {
           request: {
             userId: state.request?.userId,
             wordId: state.request?.selectedWord,
-            translatedWord: state.selectedWord,
             languageTranslatedTo: state.selectedLanguage,
             recordedVoice: data?.secure_url,
           },
