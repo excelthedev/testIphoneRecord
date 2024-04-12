@@ -18,6 +18,7 @@ import RecordingTransparentIcon from "../../assets/icons/RecordingTransparentIco
 import TranslateIconWithBg from "../../assets/icons/TranslateIconWithBg";
 import AudioAnnotationSteps from "./components/AudioAnnotationSteps";
 import { useToast } from "../../hooks/useToast";
+import { useGetDialogueDataQuery } from "../../store/api/api.config";
 
 const Dashboard = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -147,7 +148,7 @@ const Dashboard = () => {
     data: dialogData,
     isFetching,
     isLoading,
-  } = useGetDataQuery({
+  } = useGetDialogueDataQuery({
     getUrl: `${endpoints.getSingleTask}/${userInfo?._id}`,
   });
 
