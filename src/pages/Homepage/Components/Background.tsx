@@ -21,12 +21,12 @@ const Background: React.FC = () => {
 
   return (
     <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative">
-      <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] mx-4  overflow-hidden ">
-        <div className="flex justify-start ">
+      <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] overflow-hidden ">
+        <div className="flex justify-start sm:px-8 px-3 pt-3 ">
           <LangEasyLogo />
         </div>
 
-        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center md:w-[75%] m-auto sm:w-[85%]">
+        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center  m-auto p-3">
           {/* <motion.div
             className=""
             initial={{ opacity: 0, scale: 0.5 }}
