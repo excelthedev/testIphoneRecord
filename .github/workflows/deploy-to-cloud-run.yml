@@ -30,4 +30,4 @@ jobs:
         gcloud run deploy langeasy-frontend --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} --platform managed --region us-central1 --allow-unauthenticated
 
 
-#rebuild11
+#rebuild11-1
