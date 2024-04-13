@@ -25,7 +25,7 @@ const WelcomeText: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className=" h-[478px]  w-[auto] rounded-md flex justify-center items-center lg:w-[100%] ">
+    <div className=" h-[478px]  w-[auto] hidden  rounded-md md:flex justify-center items-center lg:w-[100%] ">
       <div className=" w-[100%]">
         {location.pathname === '/signup' ? (
           <p className="text-[1.4rem] font-bold text-center text-[#19213D] font-[gilroy-bold] md:text-[2rem]">

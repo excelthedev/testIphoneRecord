@@ -46,7 +46,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
 }) => {
   return (
     <div>
-      {data?.data?.taskStage !== 2 && (
+      {(data?.data?.taskStage === 1 || 3) && !isRecording &&(
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
