@@ -10,8 +10,9 @@ import RecorderLine from "../../../assets/svgs/recorder-line.svg";
 import stopRecordingIcon from "../../../assets/svgs/stop-recording.svg";
 import playRecordingIcon from "../../../assets/svgs/play-recording.svg";
 import pauseRecordeing from "../../../assets/svgs/pause-recording.svg";
-
 import React from "react";
+import useFieldRequest from "../../../hooks/useFieldRequest";
+import { useAppSelector } from "../../../store/hooks";
 
 type Props = {
   isRecording: boolean;
@@ -44,9 +45,13 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   userId,
   data,
 }) => {
+  const { setRequest } = useFieldRequest();
+  const state = useAppSelector((state) => {
+    return state.app;
+  });
   return (
     <div>
-      {(data?.data?.taskStage === 1 || 3) && !isRecording &&(
+      {(data?.data?.taskStage === 1 || 3) && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
@@ -150,9 +155,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <Select
               className="w-[10rem] max-w-3/12"
               placeholder="Select Language"
+              onChange={(e) => {
+                setRequest("language", e);
+              }}
             >
               <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
-              <Select.Option value={"English"}>English</Select.Option>
+              <Select.Option value={"Igbo"}>Igbo</Select.Option>
               <Select.Option value={"Hausa"}>Hausa</Select.Option>
             </Select>
             <TranslateLargeIcon />
@@ -162,6 +170,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             className="border-none outline-none focus:border-none text-[#867F7F] font-[gilroy-medium] text-sm font-normal focus:outline-none resize-none"
             rows={8}
             placeholder="Enter your translation here ........"
+            onChange={(e) => {
+              setRequest("translateText", e.target.value);
+            }}
           ></Input.TextArea>
         </div>
       )}
@@ -172,9 +183,11 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
                 placeholder="Select Language"
+                defaultValue={state.request?.language}
+                disabled
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
-                <Select.Option value={"English"}>English</Select.Option>
+                <Select.Option value={"Igbo"}>Igbo</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
               </Select>
               <div className="relative p-6 ">
@@ -192,7 +205,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
-                placeholder="Select Language"
+                disabled
+                defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"English"}>English</Select.Option>
@@ -215,7 +229,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
-                placeholder="Select Language"
+                disabled
+                defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"English"}>English</Select.Option>
