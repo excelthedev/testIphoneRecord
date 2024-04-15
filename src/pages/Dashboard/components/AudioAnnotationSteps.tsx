@@ -51,12 +51,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   });
   return (
     <div>
-      {(data?.data?.taskStage === 1 || 3) && !isRecording && (
+      {(data?.data?.taskStage === 1 ) && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
           </span>
-          <span>and read the sentence aloud in the displayed language</span>
+          <span>and read the sentence aloud</span>
         </span>
       )}
       {(data?.data?.taskStage === 1 || 3) && isRecording && (
@@ -73,6 +73,14 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             Translate <TranslateIconSmall />
           </span>
           <span>the displayed sentence in the language of your choosing</span>
+        </span>
+      )}
+       {(data?.data?.taskStage === 3 ) && !isRecording && (
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
+          <span className="flex items-center justify-center">
+            Click <Speak />
+          </span>
+          <span>and read the sentence aloud in {state.request?.language}</span>
         </span>
       )}
       <div className="flex items-center space-between sm:w-[60%] mx-auto">
@@ -184,7 +192,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
                 placeholder="Select Language"
                 defaultValue={state.request?.language}
-                disabled
+                 onChange={(e) => {
+              setRequest("translateText", e.target.value);
+            }}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"Igbo"}>Igbo</Select.Option>
@@ -205,7 +215,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
-                disabled
+                onChange={(e) => {
+              setRequest("translateText", e.target.value);
+            }}
                 defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
@@ -229,7 +241,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
-                disabled
+                 onChange={(e) => {
+              setRequest("translateText", e.target.value);
+            }}
                 defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>

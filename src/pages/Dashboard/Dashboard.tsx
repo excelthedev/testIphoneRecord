@@ -147,7 +147,6 @@ const Dashboard = () => {
   };
   const {
     data: dialogData,
-    currentData,
     isFetching,
     isLoading,
   } = useGetDialogueDataQuery({
@@ -363,6 +362,7 @@ const Dashboard = () => {
                       language: state.request.language,
                     },
                   });
+                  resetRecording()
                 }
                 if (dialogData?.data?.taskStage === 3) {
                   handleSaveRecording({
@@ -379,6 +379,7 @@ const Dashboard = () => {
                     },
                   });
                 }
+                resetRecording()
               }}
             >
               Save
