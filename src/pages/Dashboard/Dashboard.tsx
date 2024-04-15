@@ -35,6 +35,9 @@ const Dashboard = () => {
 
   const [handleSkiptask, result] = usePostDataMutation();
 
+  const [handleSaveRecording, handleSaveRecordingResult] =
+    usePostDataMutation();
+
   const [userInfo, setUserInfo] = useState<userInfoObject>();
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => {
@@ -151,6 +154,13 @@ const Dashboard = () => {
   } = useGetDialogueDataQuery({
     getUrl: `${endpoints.getSingleTask}/${userInfo?._id}`,
   });
+  const {
+    data: taskCountData,
+    isFetching: taskCountDataIsFetching,
+    isLoading: taskCountDataIsLoading,
+  } = useGetDialogueDataQuery({
+    getUrl: `${endpoints.getTaskCount}/${userInfo?._id}`,
+  });
 
   const { error, success } = useToast();
 
@@ -167,6 +177,20 @@ const Dashboard = () => {
       error("Something went Wrong!");
     }
   }, [result, dialogData]);
+
+  useEffect(() => {
+    if ("data" in handleSaveRecordingResult) {
+      const apiResponse = handleSaveRecordingResult?.data;
+      if (apiResponse.responseCode === 200) {
+        success(apiResponse.responseMessage);
+      } else {
+        error(apiResponse.responseMessage);
+      }
+    }
+    if (handleSaveRecordingResult.isError) {
+      error("Something went Wrong!");
+    }
+  }, [handleSaveRecordingResult]);
 
   useEffect(() => {
     const loginResponse = data?.data;
@@ -193,7 +217,16 @@ const Dashboard = () => {
         lastname={userInfo?.lastname ?? ""}
         _id={userInfo?._id ?? ""}
       />
-      <Spin spinning={isLoading || isFetching || result.isLoading}>
+      <Spin
+        spinning={
+          isLoading ||
+          isFetching ||
+          result.isLoading ||
+          taskCountDataIsFetching ||
+          taskCountDataIsLoading ||
+          handleSaveRecordingResult.isLoading
+        }
+      >
         <section className=" min-h-[80svh] ">
           <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
             <div className="flex gap-5 h-max">
@@ -227,14 +260,23 @@ const Dashboard = () => {
             <div className=" text-[#333333] md:w-[70%] gap-3 w-full ">
               <span className="flex items-center justify-between text-sm">
                 <p>Total Task</p>
-                <p>50</p>
+                <p>{taskCountData?.data?.totalTasks}</p>
               </span>
               <span className="flex items-baseline">
-                <p className="text-3xl ">14</p>
+                <p className="text-3xl ">{taskCountData?.data?.doneTasks}</p>
                 <p className="text-3xl ">/</p>
-                <p className="text-base align-text-bottom">50</p>
+                <p className="text-base align-text-bottom">
+                  {taskCountData?.data?.totalTasks}
+                </p>
               </span>
-              <Progress percent={70} showInfo={false} />
+              <Progress
+                percent={
+                  (taskCountData?.data?.doneTasks /
+                    taskCountData?.data?.totalTasks) *
+                  100
+                }
+                showInfo={false}
+              />
             </div>
           </div>
 
@@ -254,34 +296,77 @@ const Dashboard = () => {
             data={dialogData}
           />
           <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
-            <Button
-              className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4"
-              onClick={() => {
-                handleSkiptask({
-                  ...state,
-                  postUrl: endpoints.skipTask,
-                  request: {
-                    userId: userInfo?._id,
-                    subDialogueId: dialogData?.data?.subDialogueId,
-                    taskId: dialogData?.data?.taskId,
-                  },
-                });
-              }}
-            >
-              Skip {">>"}
-            </Button>
+            {dialogData?.data?.taskStage === 1 && (
+              <Button
+                className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4"
+                onClick={() => {
+                  handleSkiptask({
+                    ...state,
+                    postUrl: endpoints.skipTask,
+                    request: {
+                      userId: userInfo?._id,
+                      subDialogueId: dialogData?.data?.subDialogueId,
+                      taskId: dialogData?.data?.taskId,
+                    },
+                  });
+                }}
+              >
+                Skip {">>"}
+              </Button>
+            )}
             <Button
               className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5"
               onClick={() => {
-                if (state.currentStep === 3) {
+                if (
+                  dialogData?.data?.taskStage > 3 ||
+                  dialogData?.data?.taskStage < 1
+                ) {
                   return;
                 }
-                dispatch(
-                  setAllAppState({
+                if (dialogData?.data?.taskStage === 1) {
+                  handleSaveRecording({
                     ...state,
-                    currentStep: state.currentStep + 1,
-                  })
-                );
+                    postUrl: endpoints.recordTask,
+                    request: {
+                      userId: userInfo?._id,
+                      subDialogueId: dialogData?.data?.subDialogueId,
+                      dialogueId: dialogData?.data?.dialogueId,
+                      taskId: dialogData?.data?.taskId,
+                      taskStage: dialogData?.data?.taskStage,
+                      filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
+                    },
+                  });
+                }
+                if (dialogData?.data?.taskStage === 2) {
+                  handleSaveRecording({
+                    ...state,
+                    postUrl: endpoints.translateTask,
+                    request: {
+                      userId: userInfo?._id,
+                      subDialogueId: dialogData?.data?.subDialogueId,
+                      dialogueId: dialogData?.data?.dialogueId,
+                      taskId: dialogData?.data?.taskId,
+                      taskStage: dialogData?.data?.taskStage,
+                      translateText: state.request.translateText,
+                      language: state.request.language,
+                    },
+                  });
+                }
+                if (dialogData?.data?.taskStage === 3) {
+                  handleSaveRecording({
+                    ...state,
+                    postUrl: endpoints.speakTask,
+                    request: {
+                      userId: userInfo?._id,
+                      subDialogueId: dialogData?.data?.subDialogueId,
+                      dialogueId: dialogData?.data?.dialogueId,
+                      taskId: dialogData?.data?.taskId,
+                      taskStage: dialogData?.data?.taskStage,
+                      language: state.request.language,
+                      filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
+                    },
+                  });
+                }
               }}
             >
               Save

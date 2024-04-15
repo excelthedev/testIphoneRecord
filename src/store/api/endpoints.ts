@@ -10,7 +10,10 @@ export const endpoints = {
   },
   getUserTasks: "dialogue/getusertasks",
   getSingleTask: "dialogue/getsingletask",
-  getWords: "word",
+  getTaskCount: "task/meter",
+  recordTask: "task/record",
+  translateTask: "task/translate",
+  speakTask: "task/speak",
   user: {
     getUserInfo: "users/getuser",
   },
