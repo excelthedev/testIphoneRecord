@@ -29,10 +29,9 @@ const Dashboard = () => {
   const waveSurfer = useRef<WaveSurfer | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
-  const { data } = useGetDataQuery({
+  const { data, error: getUserDataError } = useGetDataQuery({
     getUrl: endpoints.user.getUserInfo,
   });
-
   const [handleSkiptask, result] = usePostDataMutation();
 
   const [handleSaveRecording, handleSaveRecordingResult] =
@@ -43,7 +42,6 @@ const Dashboard = () => {
   const state = useAppSelector((state) => {
     return state.app;
   });
-
   useEffect(() => {
     if (audioUrl && waveformRef.current) {
       waveSurfer.current = WaveSurfer.create({
@@ -149,6 +147,7 @@ const Dashboard = () => {
   };
   const {
     data: dialogData,
+    currentData,
     isFetching,
     isLoading,
   } = useGetDialogueDataQuery({
@@ -162,7 +161,20 @@ const Dashboard = () => {
     getUrl: `${endpoints.getTaskCount}/${userInfo?._id}`,
   });
 
-  const { error, success } = useToast();
+  const { error, warning, success } = useToast();
+  useEffect(() => {
+    //@ts-ignore
+    if (getUserDataError && getUserDataError.status === 403) {
+      //@ts-ignore
+      warning(getUserDataError?.data?.responseMessage);
+    }
+  }, [getUserDataError]);
+
+  useEffect(() => {
+    if (dialogData && dialogData.responseCode === 209) {
+      warning(dialogData?.responseMessage);
+    }
+  }, [dialogData]);
 
   useEffect(() => {
     if ("data" in result) {
