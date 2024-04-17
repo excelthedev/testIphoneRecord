@@ -346,10 +346,55 @@ const SignUp = () => {
               }}
             />
           </Form.Item>
-          <p className=" font-[gilroy-regular] text-[#666666] mt-[-1rem]">
+          <p className=" font-[gilroy-regular] text-[#666666] mt-[-1rem] mb-[1rem]">
             Use 8 or more characters with a mix of letters, numbers & symbols
           </p>
         </Popover>
+
+        <Form.Item
+          hasFeedback
+          label={
+            <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
+              Confirm Password
+            </span>
+          }
+          name={"confirmpassword"}
+          rules={[
+            {
+              required: true,
+              message: "Password must match current passwod",
+            },
+            {
+              min: 8,
+              message: "Password must have a minimum length of 8",
+            },
+            {
+              pattern: new RegExp(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
+              ),
+              message:
+                "Password must contain at least one lowercase letter, uppercase letter, number, and special character",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The new password that you entered do not match!")
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            className="w-full py-4 rounded-xl placeholder:font-[gilroy-regular] placeholder:font-normal placeholder:text-[#666666] placeholder:text-base"
+            placeholder="Confirm your password"
+            onChange={(e) => {
+              setRequest("confirmpassword", e.target.value);
+            }}
+          />
+        </Form.Item>
 
         <Form.Item
           label={
