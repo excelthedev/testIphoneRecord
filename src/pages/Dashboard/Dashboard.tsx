@@ -362,7 +362,7 @@ const Dashboard = () => {
                       language: state.request.language,
                     },
                   });
-                  resetRecording()
+                  resetRecording();
                 }
                 if (dialogData?.data?.taskStage === 3) {
                   handleSaveRecording({
@@ -379,7 +379,7 @@ const Dashboard = () => {
                     },
                   });
                 }
-                resetRecording()
+                resetRecording();
               }}
             >
               Save

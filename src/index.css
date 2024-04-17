@@ -14,24 +14,16 @@
   font-family: "gilroy-regular";
   src: url("./assets/Fonts/Gilroy-Regular.ttf") format("truetype");
 }
-.pulsating-icon {
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  margin: 0.5rem;
-  border-radius: 50%;
-  animation: pulse 1s infinite alternate;
-}
+
 .glow {
   animation: pulse 0.5s infinite alternate;
 }
-
 @keyframes pulse {
   0% {
-    transform: scale(0.8);
+    transform: translate(-50%, -50%) scale(0.8);
   }
   100% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -54,8 +46,6 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #8dc1ff;
-
-  /* display: none; */
 }
 
 /* Handle on hover */

@@ -51,11 +51,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   });
   return (
     <div>
-      {(data?.data?.taskStage === 1 ) && !isRecording && (
+      {data?.data?.taskStage === 1 && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
           </span>
+          <span>and read the sentence aloud</span>
           <span>and read the sentence aloud</span>
         </span>
       )}
@@ -75,7 +76,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span>the displayed sentence in the language of your choosing</span>
         </span>
       )}
-       {(data?.data?.taskStage === 3 ) && !isRecording && (
+      {data?.data?.taskStage === 3 && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <Speak />
@@ -84,7 +85,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
         </span>
       )}
       <div className="flex items-center space-between sm:w-[60%] mx-auto">
-        <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden">
+        <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden h-40">
           <p className="text-center flex-grow w-full text-[#333333] font-[gilroy-bold] text-2xl">
             {data?.data?.text}
           </p>
@@ -110,11 +111,11 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             </div>
           )}
           {isRecording && !audioUrl && (
-            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto  relative">
-              <img src={RecorderLine} alt="" />
+            <div className="mt-[5rem] w-full mx-auto  relative">
+              <img src={RecorderLine} alt="" className="mx-auto" />
               <button
                 onClick={stopRecording}
-                className="rounded-[50%] flex justify-center items-center absolute -translate-x-1/2  transform left-1/2 top-[-30px] glow"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 glow"
               >
                 <img src={stopRecordingIcon} alt="" />
               </button>
@@ -187,24 +188,24 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       {data?.data?.taskStage === 3 && (
         <div className="">
           {!isRecording && !audioUrl && (
-            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
+            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-10 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
                 placeholder="Select Language"
                 defaultValue={state.request?.language}
-                 onChange={(e) => {
-              setRequest("translateText", e.target.value);
-            }}
+                onChange={(e) => {
+                  setRequest("translateText", e.target.value);
+                }}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"Igbo"}>Igbo</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
               </Select>
-              <div className="relative p-6 ">
-                <img src={RecorderLine} alt="" />
+              <div className="my-[5rem] w-full mx-auto  relative">
+                <img src={RecorderLine} alt="" className="mx-auto" />
                 <button
                   onClick={startRecording}
-                  className=" rounded-[50%] flex justify-center items-center absolute -translate-x-1/2  transform left-1/2  top-[-10px]"
+                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2"
                 >
                   <MicIconLarge className="shadow-xl" />
                 </button>
@@ -216,8 +217,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
                 onChange={(e) => {
-              setRequest("translateText", e.target.value);
-            }}
+                  setRequest("translateText", e.target.value);
+                }}
                 defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
@@ -225,15 +226,25 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
               </Select>
 
-              <div className="relative p-6">
-                <img src={RecorderLine} alt="" />
+              <div className="my-[5rem] w-full mx-auto  relative">
+                <img src={RecorderLine} alt="" className="mx-auto" />
                 <button
                   onClick={stopRecording}
-                  className="rounded-[50%] flex justify-center items-center absolute -translate-x-[60%]  transform left-1/2 top-[-10px] glow"
+                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 glow"
                 >
                   <img src={stopRecordingIcon} alt="" />
                 </button>
               </div>
+
+              {/* <div className="mt-[5rem] w-full mx-auto  relative">
+                <img src={RecorderLine} alt="" />
+                <button
+                  onClick={stopRecording}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 glow"
+                >
+                  <img src={stopRecordingIcon} alt="" />
+                </button>
+              </div> */}
             </div>
           )}
 
@@ -241,9 +252,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
-                 onChange={(e) => {
-              setRequest("translateText", e.target.value);
-            }}
+                onChange={(e) => {
+                  setRequest("language", e);
+                }}
                 defaultValue={state.request?.language}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
