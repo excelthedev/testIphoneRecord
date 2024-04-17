@@ -73,7 +73,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span className="flex items-center justify-center gap-2 mr-2">
             Translate <TranslateIconSmall />
           </span>
-          <span>the displayed sentence in the language of your choosing</span>
+          <span>
+            the displayed sentence in{" "}
+            {state?.request?.language
+              ? state.request?.language
+              : "the language of your choosing"}{" "}
+          </span>
         </span>
       )}
       {data?.data?.taskStage === 3 && !isRecording && (
@@ -171,6 +176,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
               <Select.Option value={"Igbo"}>Igbo</Select.Option>
               <Select.Option value={"Hausa"}>Hausa</Select.Option>
+              <Select.Option value={"pidgin"}>Pidgin</Select.Option>
+              <Select.Option value={"ibibio"}>Ibibio</Select.Option>
             </Select>
             <TranslateLargeIcon />
           </span>
@@ -200,6 +207,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"Igbo"}>Igbo</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
+                <Select.Option value={"pidgin"}>Pidgin</Select.Option>
+                <Select.Option value={"ibibio"}>Ibibio</Select.Option>
               </Select>
               <div className="my-[5rem] w-full mx-auto  relative">
                 <img src={RecorderLine} alt="" className="mx-auto" />
@@ -224,6 +233,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"English"}>English</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
+                <Select.Option value={"pidgin"}>Pidgin</Select.Option>
+                <Select.Option value={"ibibio"}>Ibibio</Select.Option>
               </Select>
 
               <div className="my-[5rem] w-full mx-auto  relative">
