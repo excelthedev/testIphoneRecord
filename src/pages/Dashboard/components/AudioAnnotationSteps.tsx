@@ -79,6 +79,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               ? state.request?.language
               : "the language of your choosing"}{" "}
           </span>
+          <span>
+            the displayed sentence in{" "}
+            {state?.request?.language
+              ? state.request?.language
+              : "the language of your choosing"}{" "}
+          </span>
         </span>
       )}
       {data?.data?.taskStage === 3 && !isRecording && (
