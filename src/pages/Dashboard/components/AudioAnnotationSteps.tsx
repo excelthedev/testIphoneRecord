@@ -79,6 +79,12 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               ? state.request?.language
               : "the language of your choosing"}{" "}
           </span>
+          <span>
+            the displayed sentence in{" "}
+            {state?.request?.language
+              ? state.request?.language
+              : "the language of your choosing"}{" "}
+          </span>
         </span>
       )}
       {data?.data?.taskStage === 3 && !isRecording && (
@@ -201,14 +207,14 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 placeholder="Select Language"
                 defaultValue={state.request?.language}
                 onChange={(e) => {
-                  setRequest("translateText", e.target.value);
+                  setRequest("language", e);
                 }}
               >
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"Igbo"}>Igbo</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
-                <Select.Option value={"pidgin"}>Pidgin</Select.Option>
-                <Select.Option value={"ibibio"}>Ibibio</Select.Option>
+                <Select.Option value={"Pidgin"}>Pidgin</Select.Option>
+                <Select.Option value={"Ibibio"}>Ibibio</Select.Option>
               </Select>
               <div className="my-[5rem] w-full mx-auto  relative">
                 <img src={RecorderLine} alt="" className="mx-auto" />
@@ -226,7 +232,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
               <Select
                 className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
                 onChange={(e) => {
-                  setRequest("translateText", e.target.value);
+                  setRequest("language", e);
                 }}
                 defaultValue={state.request?.language}
               >
@@ -271,6 +277,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <Select.Option value={"Yoruba"}>Yoruba</Select.Option>
                 <Select.Option value={"English"}>English</Select.Option>
                 <Select.Option value={"Hausa"}>Hausa</Select.Option>
+                <Select.Option value={"pidgin"}>Pidgin</Select.Option>
+                <Select.Option value={"ibibio"}>Ibibio</Select.Option>
               </Select>
               <div className="relative">
                 <button
