@@ -57,6 +57,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             Click <Speak />
           </span>
           <span>and read the sentence aloud</span>
+          <span>and read the sentence aloud</span>
         </span>
       )}
       {(data?.data?.taskStage === 1 || 3) && isRecording && (
