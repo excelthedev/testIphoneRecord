@@ -205,8 +205,8 @@ const SignUp = () => {
             password: state.request?.password,
             gender: state.request?.gender,
             accent: state.request?.accent,
-            tribe: state.request?.tribe,
-            ethnicity: state.request?.ethnicity,
+            // tribe: state.request?.tribe,
+            // ethnicity: state.request?.ethnicity,
             consent: state.request?.consent,
             dateOfBirth: state.request?.dateOfBirth,
           })
@@ -236,14 +236,14 @@ const SignUp = () => {
             name: "accent",
             value: state.request?.accent,
           },
-          {
-            name: "tribe",
-            value: state.request?.tribe,
-          },
-          {
-            name: "ethnicity",
-            value: state.request?.ethnicity,
-          },
+          // {
+          //   name: "tribe",
+          //   value: state.request?.tribe,
+          // },
+          // {
+          //   name: "ethnicity",
+          //   value: state.request?.ethnicity,
+          // },
           {
             name: "consent",
             value: state.request?.consent,
@@ -418,6 +418,7 @@ const SignUp = () => {
             onChange={(value) => {
               setRequest("accent", value);
             }}
+            showSearch
           >
             {data?.data.map((accent: string, index: number) => (
               <Select.Option key={index} value={accent}>
@@ -427,7 +428,7 @@ const SignUp = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           label={
             <span className="text-[#333333] text-base font-[gilroy-medium] font-normal">
               Tribe
@@ -465,7 +466,7 @@ const SignUp = () => {
               setRequest("ethnicity", e.target.value);
             }}
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
           name={"consent"}
