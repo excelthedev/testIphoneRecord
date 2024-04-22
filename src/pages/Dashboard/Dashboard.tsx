@@ -100,7 +100,7 @@ const Dashboard = () => {
       };
 
       recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: "audio/mp3" });
+        const audioBlob = new Blob(chunks, { type: "audio/webm" });
         // setRecording(audioBlob);
         setAudioUrl(URL.createObjectURL(audioBlob));
       };
