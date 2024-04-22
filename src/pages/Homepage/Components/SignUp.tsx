@@ -194,6 +194,7 @@ const SignUp = () => {
       )}
 
       <Form
+        className=" flex flex-col gap-3"
         scrollToFirstError={true}
         form={form}
         {...formConfig}
@@ -250,7 +251,7 @@ const SignUp = () => {
           },
         ]}
       >
-        <p className="font-[gilroy-medium] text-[#333333] font-normal text-2xl text-center mt-1 mb-6">
+        <p className="font-[gilroy-medium] text-[#333333] font-normal text-xl md:text-2xl text-center mt-1 mb-6">
           Create your account
         </p>
         <p className="font-[gilroy-medium] text-[#333333] font-normal text-lg text-center">
@@ -527,7 +528,7 @@ const SignUp = () => {
                 setRequest("consent", e.target.checked);
               }}
             />
-            <p className=" font-[gilroy-regular] text-[#666666] font-medium text-base">
+            <p className=" font-[gilroy-regular] text-[#666666] font-medium text-sm sm:text-base">
               By creating an account, you agree to the{" "}
               <span
                 className="underline font-[gilroy-medium] text-black cursor-pointer"
@@ -548,7 +549,7 @@ const SignUp = () => {
           loading={result.isLoading}
           name={<span className="font-[gilroy-medium] text-lg">Sign up</span>}
         />
-        <p className="font-[gilroy-regular] text-base font-medium text-center">
+        <p className="font-[gilroy-regular] text-base font-medium text-center mt-2">
           Already have an account?{"  "}
           <span
             className="font-[gilroy-bold] font-semibold cursor-pointer"
