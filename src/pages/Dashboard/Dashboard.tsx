@@ -330,8 +330,7 @@ const Dashboard = () => {
                 (dialogData?.data?.taskStage === 1 && !audioUrl) ||
                 (dialogData?.data?.taskStage === 3 && !audioUrl) ||
                 (dialogData?.data?.taskStage === 2 &&
-                  !state.request?.language) ||
-                !state.request?.translateText
+                  (!state.request?.language || !state.request?.translateText))
               }
               className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5 disabled:cursor-not-allowed"
               onClick={() => {
@@ -370,6 +369,7 @@ const Dashboard = () => {
                     },
                   });
                   resetRecording();
+                  resetRecording();
                 }
                 if (dialogData?.data?.taskStage === 3) {
                   handleSaveRecording({
@@ -386,6 +386,7 @@ const Dashboard = () => {
                     },
                   });
                 }
+                resetRecording();
                 resetRecording();
               }}
             >

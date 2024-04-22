@@ -1,43 +1,9 @@
-# name: Build and Deploy to Google Cloud Run
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   setup-build-deploy:
-#     name: Setup, Build, and Deploy
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-
-#     - name: Set up Cloud SDK
-#       uses: google-github-actions/setup-gcloud@v0
-#       with:
-#         project_id: ${{ secrets.GCP_PROJECT_ID }}
-#         service_account_key: ${{ secrets.GCP_SA_KEY }}
-#         export_default_credentials: true
-
-#     - name: Build and push Docker image
-#       run: |
-#         gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} . || echo "Build submitted, unable to stream logs"
-
-#     - name: Deploy to Cloud Run
-#       run: |
-#         gcloud run deploy langeasy-frontend --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} --platform managed --region us-central1 --allow-unauthenticated
-
-
-# #rebuild11-1
-
-name: Build and Deploy to Google Cloud Run
+name: Build and Deploy to Google Cloud Run QA
 
 on:
   push:
     branches:
-      - main
+      - QA
 
 jobs:
   setup-build-deploy:
@@ -70,11 +36,12 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} . || echo "Build submitted, unable to stream logs"
+        gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend-qa:${GITHUB_SHA} . || echo "Build submitted, unable to stream logs"
+
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy langeasy-frontend \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} \
+        gcloud run deploy langeasy-frontend-qa \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend-qa:${GITHUB_SHA} \
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated \
