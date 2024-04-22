@@ -25,7 +25,6 @@ const Background: React.FC = () => {
         <div className="flex justify-start px-3 pt-3 sm:px-8 ">
           <LangEasyLogo />
         </div>
-
         <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center mx-10 max-w-[1440px] md:ml-[10rem]">
           <WelcomeText />
           <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full">
