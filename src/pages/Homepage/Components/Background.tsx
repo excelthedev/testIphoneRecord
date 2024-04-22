@@ -20,13 +20,13 @@ const Background: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative">
-      <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] overflow-hidden ">
+    <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative w-full">
+      <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] overflow-hidden w-full">
         <div className="flex justify-start px-3 pt-3 sm:px-8 ">
           <LangEasyLogo />
         </div>
 
-        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center mx-10">
+        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center mx-10 max-w-[1440px] md:ml-[10rem]">
           <WelcomeText />
           <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full">
             {location.pathname !== "/" && (

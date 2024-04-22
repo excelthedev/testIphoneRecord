@@ -268,8 +268,8 @@ const Dashboard = () => {
                 <p className="hidden sm:block"> Speak</p>
               </span>
             </div>
-            <div className=" text-[#333333] md:w-[70%] gap-3 w-full ">
-              <span className="flex items-center justify-between text-sm">
+            <div className=" text-[#333333] md:w-[70%] gap-3 w-full px-3 md:px-0 ">
+              <span className="flex items-center justify-between text-sm font-[gilroy-medium]">
                 <p>Total Task</p>
                 <p>{taskCountData?.data?.totalTasks}</p>
               </span>

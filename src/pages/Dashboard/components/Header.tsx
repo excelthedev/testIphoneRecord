@@ -46,7 +46,7 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
     sessionStorage.clear();
     navigate(ROUTES.HOMEPAGE, { replace: true });
   };
-  const menushowStyle = ` ${openMenu ? `flex` : `hidden`} `;
+  // const menushowStyle = ` ${openMenu ? `flex` : `hidden`} `;
 
   return (
     <>
@@ -55,11 +55,11 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
 
         <ul
           className={
-            menushowStyle +
-            ` md:w-full max-w-[65%] md:border-none md:flex md:flex-row md:justify-between md:max-w-[65%]  md:bg-inherit md:relative md:top-[0px] md:right-[0px] md:p-0 md:rounded-none rounded-xl flex-col gap-3 top-14 bg-white w-max absolute right-0 text-center   border p-3  `
+            // menushowStyle +
+            ` md:w-full max-w-[65%]  md:flex md:flex-row md:justify-end md:max-w-[65%]  md:bg-inherit md:relative md:top-[0px] md:right-[0px] md:p-0 md:rounded-none rounded-xl flex-col gap-3 bg-white w-max absolute right-0 text-center p-3  `
           }
         >
-          <li className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer justify-center">
+          {/* <li className="flex items-center gap-2 font-[gilroy-medium] cursor-pointer justify-center">
             <p className="w-3 h-3 rounded-[50%] bg-black"></p>
             <p className="text-xs font-semibold sm:text-sm md:text-lg">
               Text Collection
@@ -70,9 +70,10 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
             <p className=" text-xs sm:text-sm md:text-lg font-semibold text-[#666F8D]">
               Audio Collection
             </p>
-          </li>
+          </li> */}
           <li className="flex items-center gap-2">
             <Popover
+              trigger={"hover"}
               showArrow={false}
               content={
                 <div
@@ -106,12 +107,12 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
           </li>
         </ul>
 
-        <HamburgerIcon
+        {/* <HamburgerIcon
           className="z-10 block md:hidden"
           onClick={() => {
             setOpenMenu(!openMenu);
           }}
-        />
+        /> */}
       </div>
       <PageModal
         openModal={openModal}

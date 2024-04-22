@@ -13,6 +13,8 @@ import pauseRecordeing from "../../../assets/svgs/pause-recording.svg";
 import React from "react";
 import useFieldRequest from "../../../hooks/useFieldRequest";
 import { useAppSelector } from "../../../store/hooks";
+import RecordingTransparentIcon from "../../../assets/icons/RecordingTransparentIcon";
+import NoBgRecorder from "../../../assets/icons/NoBgRecorder";
 
 type Props = {
   isRecording: boolean;
@@ -52,16 +54,15 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   return (
     <div>
       {data?.data?.taskStage === 1 && !isRecording && (
-        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
-          <span className="flex items-center justify-center">
-            Click <Speak />
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-base md:text-base font-[gilroy-medium] text-center ">
+          <span className=" flex justify-center items-center ">
+            Click <NoBgRecorder />
           </span>
-          <span>and read the sentence aloud</span>
-          <span>and read the sentence aloud</span>
+          <p> and read the sentence aloud</p>
         </span>
       )}
       {(data?.data?.taskStage === 1 || 3) && isRecording && (
-        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-sm md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center">
             Click <StopRecordingSmallIcon />
           </span>
@@ -69,15 +70,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
         </span>
       )}
       {data?.data?.taskStage === 2 && (
-        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-sm md:text-base font-[gilroy-medium] text-center ">
           <span className="flex items-center justify-center gap-2 mr-2">
             Translate <TranslateIconSmall />
-          </span>
-          <span>
-            the displayed sentence in{" "}
-            {state?.request?.language
-              ? state.request?.language
-              : "the language of your choosing"}{" "}
           </span>
           <span>
             the displayed sentence in{" "}
@@ -88,16 +83,16 @@ const AudioAnnotationSteps: React.FC<Props> = ({
         </span>
       )}
       {data?.data?.taskStage === 3 && !isRecording && (
-        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-xs md:text-base font-[gilroy-medium] text-center ">
-          <span className="flex items-center justify-center">
-            Click <Speak />
+        <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-sm md:text-base font-[gilroy-medium] text-center  ">
+          <span className=" flex justify-center items-center ">
+            Click <NoBgRecorder />
           </span>
-          <span>and read the sentence aloud in {state.request?.language}</span>
+          <p> and read the sentence aloud in {state.request?.language}</p>
         </span>
       )}
       <div className="flex items-center space-between sm:w-[60%] mx-auto">
         <div className=" w-full mt-2 p-3 text-center mx-auto bg-white rounded-2xl border flex items-center border-[#E3E6EA] overflow-hidden h-40">
-          <p className="text-center flex-grow w-full text-[#333333] font-[gilroy-bold] text-2xl">
+          <p className="text-center  w-full text-[#333333] font-[gilroy-bold] sm:text-2xl text-lg">
             {data?.data?.text}
           </p>
         </div>
@@ -170,10 +165,10 @@ const AudioAnnotationSteps: React.FC<Props> = ({
         </div>
       )}
       {data?.data?.taskStage === 2 && (
-        <div className="w-[80%] sm:w-[60%] mx-auto my-3 bg-white p-4 rounded-2xl">
-          <span className="flex items-center justify-between mb-4">
+        <div className="w-full sm:w-[60%] mx-auto my-3 bg-white p-4 rounded-2xl">
+          <span className="flex justify-between mb-4  items-center">
             <Select
-              className="w-[10rem] max-w-3/12"
+              className=" max-w-3/12 "
               placeholder="Select Language"
               onChange={(e) => {
                 setRequest("language", e);
@@ -189,7 +184,8 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           </span>
           <hr className="my-4" />
           <Input.TextArea
-            className="border-none outline-none focus:border-none text-[#867F7F] font-[gilroy-medium] text-sm font-normal focus:outline-none resize-none"
+            className="border-none outline-none focus:border-none text-[#867F7F] font-[gilroy-medium] text-sm font-normal focus:outline-none resize-none "
+            style={{ resize: "none" }}
             rows={8}
             placeholder="Enter your translation here ........"
             onChange={(e) => {
@@ -201,9 +197,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       {data?.data?.taskStage === 3 && (
         <div className="">
           {!isRecording && !audioUrl && (
-            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-10 rounded-2xl">
+            <div className="mt-[5rem] sm:w-[60%] mx-auto w-full bg-white p-10 rounded-2xl flex flex-col items-center sm:items-start">
               <Select
-                className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
+                className=" text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12 "
                 placeholder="Select Language"
                 defaultValue={state.request?.language}
                 onChange={(e) => {
@@ -228,9 +224,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
             </div>
           )}
           {isRecording && !audioUrl && (
-            <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
+            <div className="mt-[5rem] w-full mx-auto sm:w-[60%] bg-white p-6 rounded-2xl">
               <Select
-                className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
+                className=" text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12 "
                 onChange={(e) => {
                   setRequest("language", e);
                 }}
@@ -268,7 +264,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           {audioUrl && (
             <div className="mt-[5rem] w-[80%] sm:w-[60%] mx-auto bg-white p-6 rounded-2xl">
               <Select
-                className="w-[10rem] text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12"
+                className=" text-[#19213D] font-[gilroy-medium] text-xs font-normal mb-4 h-10 max-w-3/12 "
                 onChange={(e) => {
                   setRequest("language", e);
                 }}
