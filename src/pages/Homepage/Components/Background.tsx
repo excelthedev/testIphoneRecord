@@ -22,20 +22,13 @@ const Background: React.FC = () => {
   return (
     <div className="  bg-gradient-to-tr from-[#0B6A96] from-1% via-[#d4effa] via-1% to-[#D0EBFF]  min-h-[100svh] relative">
       <div className="grid grid-rows-[4rem_1fr_2rem] min-h-[80svh] overflow-hidden ">
-        <div className="flex justify-start sm:px-8 px-3 pt-3 ">
+        <div className="flex justify-start px-3 pt-3 sm:px-8 ">
           <LangEasyLogo />
         </div>
 
-        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center  m-auto p-3">
-          {/* <motion.div
-            className=""
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ ease: "easeInOut", duration: 1.0 }}
-          >
-          </motion.div> */}
+        <div className="flex flex-col gap-[6rem] justify-center sm:flex-row items-center mx-10">
           <WelcomeText />
-          <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full  md:py-3 ">
+          <Card className=" h-[80svh] overflow-y-scroll bg-white rounded-3xl w-full">
             {location.pathname !== "/" && (
               <ArrowIcon
                 className="cursor-pointer "
@@ -44,10 +37,8 @@ const Background: React.FC = () => {
                 }}
               />
             )}
-            <div className="flex justify-center">
-              <LangEasyLogo />
-            </div>
-            <div className="">
+
+            <div className="w-full ">
               <Outlet />
             </div>
           </Card>
