@@ -21,22 +21,42 @@
 #         service_account_key: ${{ secrets.GCP_SA_KEY }}
 #         export_default_credentials: true
 
+#     - name: Load environment variables
+#       run: |
+#         echo "VITE_APP_CLOUDINARY_API_KEY=${{ secrets.VITE_APP_CLOUDINARY_API_KEY }}" >> $GITHUB_ENV
+#         echo "VITE_APP_CLOUDINARY_API_SECRET=${{ secrets.VITE_APP_CLOUDINARY_API_SECRET }}" >> $GITHUB_ENV
+#         echo "VITE_APP_CLOUDINARY_CLOUD_NAME=${{ secrets.VITE_APP_CLOUDINARY_CLOUD_NAME }}" >> $GITHUB_ENV
+#         echo "VITE_APP_CLOUDINARY_API_BASE_URL=${{ secrets.VITE_APP_CLOUDINARY_API_BASE_URL }}" >> $GITHUB_ENV
+#         echo "VITE_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.VITE_APP_CLOUDINARY_UPLOAD_PRESET }}" >> $GITHUB_ENV
+#         echo "VITE_APP_BASE_URL=${{ secrets.VITE_APP_BASE_URL }}" >> $GITHUB_ENV
+#         echo "VITE_APP_SECRET_KEY=${{ secrets.VITE_APP_SECRET_KEY }}" >> $GITHUB_ENV
+#         echo "VITE_APP_TOKEN=${{ secrets.VITE_APP_TOKEN }}" >> $GITHUB_ENV
+#         echo "VITE_APP_REFRESH_TOKEN=${{ secrets.VITE_APP_REFRESH_TOKEN }}" >> $GITHUB_ENV
+#         echo "VITE_APP_USER_INFO=${{ secrets.VITE_APP_USER_INFO }}" >> $GITHUB_ENV
+
 #     - name: Build and push Docker image
 #       run: |
 #         gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} . || echo "Build submitted, unable to stream logs"
-
 #     - name: Deploy to Cloud Run
 #       run: |
-#         gcloud run deploy langeasy-frontend --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} --platform managed --region us-central1 --allow-unauthenticated
+#         gcloud run deploy langeasy-frontend \
+#           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} \
+#           --platform managed \
+#           --region us-central1 \
+#           --allow-unauthenticated \
+#           --update-env-vars VITE_APP_CLOUDINARY_API_KEY=${{ secrets.VITE_APP_CLOUDINARY_API_KEY }},VITE_APP_CLOUDINARY_API_SECRET=${{ secrets.VITE_APP_CLOUDINARY_API_SECRET }},VITE_APP_CLOUDINARY_CLOUD_NAME=${{ secrets.VITE_APP_CLOUDINARY_CLOUD_NAME }},VITE_APP_CLOUDINARY_API_BASE_URL=${{ secrets.VITE_APP_CLOUDINARY_API_BASE_URL }},VITE_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.VITE_APP_CLOUDINARY_UPLOAD_PRESET }},VITE_APP_BASE_URL=${{ secrets.VITE_APP_BASE_URL }},VITE_APP_SECRET_KEY=${{ secrets.VITE_APP_SECRET_KEY }},VITE_APP_TOKEN=${{ secrets.VITE_APP_TOKEN }},VITE_APP_REFRESH_TOKEN=${{ secrets.VITE_APP_REFRESH_TOKEN }},VITE_APP_USER_INFO=${{ secrets.VITE_APP_USER_INFO }}
 
 
-# #rebuild11-1
+
+
+
 
 name: Build and Deploy to Google Cloud Run
 
 on:
   push:
     branches:
+      - QA
       - main
 
 jobs:
@@ -70,11 +90,16 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} . || echo "Build submitted, unable to stream logs"
+        suffix=$([[ "${{ github.ref }}" == "refs/heads/main" ]] && echo "" || echo "-qa")
+        tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend${suffix}:${GITHUB_SHA}
+        gcloud builds submit --tag $tag . || echo "Build submitted, unable to stream logs"
+
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy langeasy-frontend \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend:${GITHUB_SHA} \
+        suffix=$([[ "${{ github.ref }}" == "refs/heads/main" ]] && echo "" || echo "-qa")
+        service_name="langeasy-frontend${suffix}"
+        gcloud run deploy $service_name \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/$tag \
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated \
