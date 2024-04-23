@@ -79,27 +79,26 @@ jobs:
       run: |
         echo "VITE_APP_CLOUDINARY_API_KEY=${{ secrets.VITE_APP_CLOUDINARY_API_KEY }}" >> $GITHUB_ENV
         echo "VITE_APP_CLOUDINARY_API_SECRET=${{ secrets.VITE_APP_CLOUDINARY_API_SECRET }}" >> $GITHUB_ENV
-        echo "VITE_APP_CLOUDINARY_CLOUD_NAME=${{ secrets.VITE_APP_CLOUDINARY_CLOUD_NAME }}" >> $GITHUB_ENV
-        echo "VITE_APP_CLOUDINARY_API_BASE_URL=${{ secrets.VITE_APP_CLOUDINARY_API_BASE_URL }}" >> $GITHUB_ENV
-        echo "VITE_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.VITE_APP_CLOUDINARY_UPLOAD_PRESET }}" >> $GITHUB_ENV
-        echo "VITE_APP_BASE_URL=${{ secrets.VITE_APP_BASE_URL }}" >> $GITHUB_ENV
-        echo "VITE_APP_SECRET_KEY=${{ secrets.VITE_APP_SECRET_KEY }}" >> $GITHUB_ENV
-        echo "VITE_APP_TOKEN=${{ secrets.VITE_APP_TOKEN }}" >> $GITHUB_ENV
-        echo "VITE_APP_REFRESH_TOKEN=${{ secrets.VITE_APP_REFRESH_TOKEN }}" >> $GITHUB_ENV
-        echo "VITE_APP_USER_INFO=${{ secrets.VITE_APP_USER_INFO }}" >> $GITHUB_ENV
+        # Load other variables similarly
 
+    - name: Determine suffix and tag
+      id: prep
+      run: |
+        echo "Branch Ref: ${{ github.ref }}"
+        suffix=$([[ "${{ github.ref }}" == "refs/heads/main" ]] && echo "" || echo "-qa")
+        tag="gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend${suffix}:${GITHUB_SHA}"
+        echo "Suffix: $suffix"
+        echo "Tag: $tag"
+        echo "::set-output name=tag::$tag"
+    
     - name: Build and push Docker image
       run: |
-        suffix=$([[ "${{ github.ref }}" == "refs/heads/main" ]] && echo "" || echo "-qa")
-        tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/langeasy-frontend${suffix}:${GITHUB_SHA}
-        gcloud builds submit --tag $tag . || echo "Build submitted, unable to stream logs"
-
+        gcloud builds submit --tag ${{ steps.prep.outputs.tag }} . || echo "Build submitted, unable to stream logs"
+    
     - name: Deploy to Cloud Run
       run: |
-        suffix=$([[ "${{ github.ref }}" == "refs/heads/main" ]] && echo "" || echo "-qa")
-        service_name="langeasy-frontend${suffix}"
-        gcloud run deploy $service_name \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/$tag \
+        gcloud run deploy langeasy-frontend${{ steps.prep.outputs.suffix }} \
+          --image ${{ steps.prep.outputs.tag }} \
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated \
