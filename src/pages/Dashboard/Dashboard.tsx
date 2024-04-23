@@ -290,22 +290,27 @@ const Dashboard = () => {
               />
             </div>
           </div>
-
-          <AudioAnnotationSteps
-            audioUrl={audioUrl}
-            currentTime={currentTime}
-            // formatTime={formatTime()}
-            handleRestartRecording={handleRestartRecording}
-            isPlaying={isPlaying}
-            isRecording={isRecording}
-            resetRecording={resetRecording}
-            startRecording={startRecording}
-            stopRecording={stopRecording}
-            togglePlayPause={togglePlayPause}
-            waveformRef={waveformRef}
-            userId={userInfo?._id}
-            data={dialogData}
-          />
+          {dialogData?.responseCode === 209 ? (
+            <div className="w-full sm:w-[60%] mx-auto my-8 bg-white p-4 rounded-2xl text-center font-[gilroy-medium]">
+              {dialogData?.responseMessage}
+            </div>
+          ) : (
+            <AudioAnnotationSteps
+              audioUrl={audioUrl}
+              currentTime={currentTime}
+              // formatTime={formatTime()}
+              handleRestartRecording={handleRestartRecording}
+              isPlaying={isPlaying}
+              isRecording={isRecording}
+              resetRecording={resetRecording}
+              startRecording={startRecording}
+              stopRecording={stopRecording}
+              togglePlayPause={togglePlayPause}
+              waveformRef={waveformRef}
+              userId={userInfo?._id}
+              data={dialogData}
+            />
+          )}
           <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
             {dialogData?.data?.taskStage === 1 && (
               <Button
@@ -325,73 +330,75 @@ const Dashboard = () => {
                 Skip {">>"}
               </Button>
             )}
-            <Button
-              disabled={
-                (dialogData?.data?.taskStage === 1 && !audioUrl) ||
-                (dialogData?.data?.taskStage === 3 && !audioUrl) ||
-                (dialogData?.data?.taskStage === 2 &&
-                  (!state.request?.language || !state.request?.translateText))
-              }
-              className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5 disabled:cursor-not-allowed"
-              onClick={() => {
-                if (
-                  dialogData?.data?.taskStage > 3 ||
-                  dialogData?.data?.taskStage < 1
-                ) {
-                  return;
+            {dialogData?.responseCode !== 209 && (
+              <Button
+                disabled={
+                  (dialogData?.data?.taskStage === 1 && !audioUrl) ||
+                  (dialogData?.data?.taskStage === 3 && !audioUrl) ||
+                  (dialogData?.data?.taskStage === 2 &&
+                    (!state.request?.language || !state.request?.translateText))
                 }
-                if (dialogData?.data?.taskStage === 1) {
-                  handleSaveRecording({
-                    ...state,
-                    postUrl: endpoints.recordTask,
-                    request: {
-                      userId: userInfo?._id,
-                      subDialogueId: dialogData?.data?.subDialogueId,
-                      dialogueId: dialogData?.data?.dialogueId,
-                      taskId: dialogData?.data?.taskId,
-                      taskStage: dialogData?.data?.taskStage,
-                      filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
-                    },
-                  });
-                }
-                if (dialogData?.data?.taskStage === 2) {
-                  handleSaveRecording({
-                    ...state,
-                    postUrl: endpoints.translateTask,
-                    request: {
-                      userId: userInfo?._id,
-                      subDialogueId: dialogData?.data?.subDialogueId,
-                      dialogueId: dialogData?.data?.dialogueId,
-                      taskId: dialogData?.data?.taskId,
-                      taskStage: dialogData?.data?.taskStage,
-                      translateText: state.request.translateText,
-                      language: state.request.language,
-                    },
-                  });
+                className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5 disabled:cursor-not-allowed"
+                onClick={() => {
+                  if (
+                    dialogData?.data?.taskStage > 3 ||
+                    dialogData?.data?.taskStage < 1
+                  ) {
+                    return;
+                  }
+                  if (dialogData?.data?.taskStage === 1) {
+                    handleSaveRecording({
+                      ...state,
+                      postUrl: endpoints.recordTask,
+                      request: {
+                        userId: userInfo?._id,
+                        subDialogueId: dialogData?.data?.subDialogueId,
+                        dialogueId: dialogData?.data?.dialogueId,
+                        taskId: dialogData?.data?.taskId,
+                        taskStage: dialogData?.data?.taskStage,
+                        filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
+                      },
+                    });
+                  }
+                  if (dialogData?.data?.taskStage === 2) {
+                    handleSaveRecording({
+                      ...state,
+                      postUrl: endpoints.translateTask,
+                      request: {
+                        userId: userInfo?._id,
+                        subDialogueId: dialogData?.data?.subDialogueId,
+                        dialogueId: dialogData?.data?.dialogueId,
+                        taskId: dialogData?.data?.taskId,
+                        taskStage: dialogData?.data?.taskStage,
+                        translateText: state.request.translateText,
+                        language: state.request.language,
+                      },
+                    });
+                    resetRecording();
+                    resetRecording();
+                  }
+                  if (dialogData?.data?.taskStage === 3) {
+                    handleSaveRecording({
+                      ...state,
+                      postUrl: endpoints.speakTask,
+                      request: {
+                        userId: userInfo?._id,
+                        subDialogueId: dialogData?.data?.subDialogueId,
+                        dialogueId: dialogData?.data?.dialogueId,
+                        taskId: dialogData?.data?.taskId,
+                        taskStage: dialogData?.data?.taskStage,
+                        language: state.request.language,
+                        filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
+                      },
+                    });
+                  }
                   resetRecording();
                   resetRecording();
-                }
-                if (dialogData?.data?.taskStage === 3) {
-                  handleSaveRecording({
-                    ...state,
-                    postUrl: endpoints.speakTask,
-                    request: {
-                      userId: userInfo?._id,
-                      subDialogueId: dialogData?.data?.subDialogueId,
-                      dialogueId: dialogData?.data?.dialogueId,
-                      taskId: dialogData?.data?.taskId,
-                      taskStage: dialogData?.data?.taskStage,
-                      language: state.request.language,
-                      filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
-                    },
-                  });
-                }
-                resetRecording();
-                resetRecording();
-              }}
-            >
-              Save
-            </Button>
+                }}
+              >
+                Save
+              </Button>
+            )}
           </div>
         </section>
       </Spin>
