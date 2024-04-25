@@ -7,9 +7,8 @@ export const getThemeConfig = (): ThemeConfig | undefined => {
     },
     components: {
       Select: {
-        colorBgContainer: "#F0F2F5",
+        colorBgContainer: "transparent",
         controlHeight: 50,
-        
       },
     },
   };

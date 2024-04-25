@@ -2,7 +2,6 @@ import { Select, Input } from "antd";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
 import MicIconLarge from "../../../assets/icons/MicIconLarge";
 import RefreshIcon from "../../../assets/icons/RefreshIcon";
-import Speak from "../../../assets/icons/Speak";
 import StopRecordingSmallIcon from "../../../assets/icons/StopRecordingSmallIcon";
 import TranslateIconSmall from "../../../assets/icons/TranslateIconSmall";
 import TranslateLargeIcon from "../../../assets/icons/TranslateLargeIcon";
@@ -13,7 +12,6 @@ import pauseRecordeing from "../../../assets/svgs/pause-recording.svg";
 import React from "react";
 import useFieldRequest from "../../../hooks/useFieldRequest";
 import { useAppSelector } from "../../../store/hooks";
-import RecordingTransparentIcon from "../../../assets/icons/RecordingTransparentIcon";
 import NoBgRecorder from "../../../assets/icons/NoBgRecorder";
 
 type Props = {
@@ -27,7 +25,6 @@ type Props = {
   resetRecording: () => void;
   waveformRef: any;
   currentTime: number;
-  formatTime?: (currentTime: number) => string;
   userId: string | undefined;
   data: any;
 };
@@ -43,7 +40,6 @@ const AudioAnnotationSteps: React.FC<Props> = ({
   resetRecording,
   currentTime,
   waveformRef,
-  formatTime,
   userId,
   data,
 }) => {
@@ -55,7 +51,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
     <div>
       {data?.data?.taskStage === 1 && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-base md:text-base font-[gilroy-medium] text-center ">
-          <span className=" flex justify-center items-center ">
+          <span className="flex items-center justify-center ">
             Click <NoBgRecorder />
           </span>
           <p> and read the sentence aloud</p>
@@ -84,7 +80,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       )}
       {data?.data?.taskStage === 3 && !isRecording && (
         <span className="flex flex-col sm:flex-row items-center justify-center mt-20 text-[#333333] text-sm md:text-base font-[gilroy-medium] text-center  ">
-          <span className=" flex justify-center items-center ">
+          <span className="flex items-center justify-center ">
             Click <NoBgRecorder />
           </span>
           <p> and read the sentence aloud in {state.request?.language}</p>
@@ -143,7 +139,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <div className="flex items-center mt-8">
                   <div
                     ref={waveformRef}
-                    className="w-full cursor-pointer"
+                    className="w-full my-10 cursor-pointer"
                   ></div>
                   <p className="text-lg text-[#666F8D] font-Inter font-medium">
                     {/* {formatTime(currentTime)} */}
@@ -166,9 +162,9 @@ const AudioAnnotationSteps: React.FC<Props> = ({
       )}
       {data?.data?.taskStage === 2 && (
         <div className="w-full sm:w-[60%] mx-auto my-3 bg-white p-4 rounded-2xl">
-          <span className="flex justify-between mb-4  items-center">
+          <span className="flex items-center justify-between mb-4">
             <Select
-              className=" max-w-3/12 "
+              className=" max-w-3/12"
               placeholder="Select Language"
               onChange={(e) => {
                 setRequest("language", e);
@@ -289,7 +285,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
                 <div className="flex items-center mt-8">
                   <div
                     ref={waveformRef}
-                    className="w-full cursor-pointer"
+                    className="w-full my-10 cursor-pointer"
                   ></div>
                   <p className="text-lg text-[#666F8D] font-Inter font-medium">
                     {/* {formatTime(currentTime)} */}

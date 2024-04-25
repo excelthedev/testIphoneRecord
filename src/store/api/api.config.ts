@@ -43,6 +43,7 @@ export const baseQuery = fetchBaseQuery({
       sessionStorage.getItem(import.meta.env.VITE_APP_TOKEN)?.length
     ) {
       headers.set("Authorization", `Bearer ${userToken()}`);
+      headers.set("Content-Type", "application/json");
       return headers;
     }
   },
@@ -52,7 +53,7 @@ export const globalApi = createApi({
   baseQuery: baseQueryWithReauth(baseQuery),
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
-  tagTypes: ["GetData","GetDialogueData"],
+  tagTypes: ["GetData", "GetDialogueData"],
   endpoints: (builder) => ({
     getData: builder.query({
       query: (data) => {
@@ -86,7 +87,7 @@ export const globalApi = createApi({
         };
       },
       invalidatesTags: (_result, _error, arg) => [
-      { type: "GetDialogueData", id: arg.id }
+        { type: "GetDialogueData", id: arg.id },
       ],
     }),
     updateData: builder.mutation({
@@ -101,6 +102,7 @@ export const globalApi = createApi({
         { type: "GetData", id: arg.id },
       ],
     }),
+
     authPostData: builder.mutation({
       query: (data: State.AppState) => {
         return {
@@ -110,15 +112,6 @@ export const globalApi = createApi({
         };
       },
     }),
-    // getDataByPostMethodSecured: builder.mutation({
-    //   query: (data: State.AppState) => {
-    //     return {
-    //       url: data.getPostUrl,
-    //       method: FORM_METHODS.POST,
-    //       body: data.request,
-    //     };
-    //   },
-    // }),
   }),
 });
 export const {

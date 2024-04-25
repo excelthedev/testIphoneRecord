@@ -1,9 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  setAllAppState,
-  useGetDataQuery,
-  usePostDataMutation,
-} from "../../store";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { setAllAppState, useGetDataQuery } from "../../store";
 import Header from "./components/Header";
 import { endpoints } from "../../store/api/endpoints";
 import { Progress, Spin } from "antd";
@@ -18,30 +14,166 @@ import RecordingTransparentIcon from "../../assets/icons/RecordingTransparentIco
 import TranslateIconWithBg from "../../assets/icons/TranslateIconWithBg";
 import AudioAnnotationSteps from "./components/AudioAnnotationSteps";
 import { useToast } from "../../hooks/useToast";
-import { useGetDialogueDataQuery } from "../../store/api/api.config";
+import { baseUrl } from "../../store/api/api.config";
+import { Encryption } from "../../utils/encryption";
 
 const Dashboard = () => {
+  const { error, warning, success } = useToast();
+
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState<Blob | null>();
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const waveformRef = useRef<HTMLDivElement>(null);
   const waveSurfer = useRef<WaveSurfer | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [userInfo, setUserInfo] = useState<userInfoObject>();
+  const [taskCountData, setTaskCountData] = useState<any>();
+  const [dialogData, setDialogDetails] = useState<any>();
+  const [loading, setIsLoading] = useState<boolean>(false);
 
   const { data, error: getUserDataError } = useGetDataQuery({
     getUrl: endpoints.user.getUserInfo,
   });
-  const [handleSkiptask, result] = usePostDataMutation();
 
-  const [handleSaveRecording, handleSaveRecordingResult] =
-    usePostDataMutation();
+  const token = JSON.parse(
+    Encryption.decrypt(
+      sessionStorage.getItem(import.meta.env.VITE_APP_TOKEN) as string
+    )
+  );
+  const getUserTasks = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${baseUrl}${endpoints.getSingleTask}/${userInfo?._id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setIsLoading(false);
+      if (response.ok) {
+        setDialogDetails(data);
+      }
+      if (!response.ok) {
+        error("Something went wrong!");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
 
-  const [userInfo, setUserInfo] = useState<userInfoObject>();
+  const getData = useCallback(async () => {
+    if (!userInfo?._id) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      await getUserTasks();
+      const response = await fetch(
+        `${baseUrl}${endpoints.getTaskCount}/${userInfo?._id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setIsLoading(false);
+      if (response.ok) {
+        setTaskCountData(data);
+      }
+      if (!response.ok) {
+        error("Something went wrong!");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  }, [userInfo?._id]);
+
+  const handleSaveTranslation = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseUrl}${endpoints.translateTask}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userInfo?._id,
+          subDialogueId: dialogData?.data?.subDialogueId,
+          dialogueId: dialogData?.data?.dialogueId,
+          taskId: dialogData?.data?.taskId,
+          taskStage: dialogData?.data?.taskStage,
+          translateText: state.request.translateText,
+          language: state.request.language,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        success(data?.responseMessage);
+        getData();
+        resetRecording();
+      }
+      if (!response.ok) {
+        error(data?.responseMessage);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log(error);
+    }
+  };
+  const handleSkipTask = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseUrl}${endpoints.skipTask}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userInfo?._id,
+          subDialogueId: dialogData?.data?.subDialogueId,
+          taskId: dialogData?.data?.taskId,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        success(data?.responseMessage);
+        getData();
+      }
+      if (!response.ok) {
+        error(data?.responseMessage);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (data && !getUserDataError) {
+      getData();
+    }
+  }, [data, getUserDataError, getData]);
+
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => {
     return state.app;
   });
+
   useEffect(() => {
     if (audioUrl && waveformRef.current) {
       waveSurfer.current = WaveSurfer.create({
@@ -86,6 +218,96 @@ const Dashboard = () => {
     }
   };
 
+  const recordFormSubmitHandler = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    userInfo?._id && formData.append("userId", String(userInfo?._id));
+    dialogData?.data?.subDialogueId &&
+      formData.append("subDialogueId", String(dialogData?.data?.subDialogueId));
+    dialogData?.data?.dialogueId &&
+      formData.append("dialogueId", String(dialogData?.data?.dialogueId));
+    dialogData?.data?.taskId &&
+      formData.append("taskId", String(dialogData?.data?.taskId));
+    dialogData?.data?.taskStage &&
+      formData.append("taskStage", String(dialogData?.data?.taskStage));
+    formData.append("task", "Record");
+    blobUrl && formData.append("file", blobUrl, "record.webm");
+    try {
+      const token = JSON.parse(
+        Encryption.decrypt(
+          sessionStorage.getItem(import.meta.env.VITE_APP_TOKEN) as string
+        )
+      );
+      const response = await fetch(`${baseUrl}task/record`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      const formResponseData = await response.json();
+      setIsLoading(false);
+      if (!response.ok) {
+        error(formResponseData?.responseMessage);
+      }
+      if (response.ok) {
+        getData();
+        success(formResponseData?.responseMessage);
+        resetRecording();
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      throw error;
+    }
+  };
+  const speakFormSubmitHandler = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    userInfo?._id && formData.append("userId", String(userInfo?._id));
+    dialogData?.data?.subDialogueId &&
+      formData.append("subDialogueId", String(dialogData?.data?.subDialogueId));
+    dialogData?.data?.dialogueId &&
+      formData.append("dialogueId", String(dialogData?.data?.dialogueId));
+    dialogData?.data?.taskId &&
+      formData.append("taskId", String(dialogData?.data?.taskId));
+    state.request.language &&
+      formData.append("language", String(state.request.language));
+    dialogData?.data?.taskStage &&
+      formData.append("taskStage", String(dialogData?.data?.taskStage));
+    formData.append("task", "Speak");
+    blobUrl && formData.append("file", blobUrl, "speak.webm");
+    try {
+      const token = JSON.parse(
+        Encryption.decrypt(
+          sessionStorage.getItem(import.meta.env.VITE_APP_TOKEN) as string
+        )
+      );
+      const response = await fetch(`${baseUrl}task/speak`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+      const formResponseData = await response.json();
+      setIsLoading(false);
+      if (!response.ok) {
+        error(formResponseData?.responseMessage);
+      }
+      if (response.ok) {
+        getData();
+        success(formResponseData?.responseMessage);
+        resetRecording();
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      throw error;
+    }
+  };
+
   const startRecording = async () => {
     setIsRecording(true);
     try {
@@ -100,20 +322,13 @@ const Dashboard = () => {
       };
 
       recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: "audio/webm" });
-        // setRecording(audioBlob);
-        setAudioUrl(URL.createObjectURL(audioBlob));
+        const newAudioBlob = new Blob(chunks, { type: "audio/webm" });
+        const newBlobUrl = URL.createObjectURL(newAudioBlob);
+        setBlobUrl(newAudioBlob);
+        setAudioUrl(newBlobUrl);
       };
 
       recorder.start();
-      // Stop recording after 5 seconds
-      // setTimeout(() => {
-      //   recorder.stop();
-      //   stream.getTracks().forEach((track) => {
-      //     track.stop();
-      //   });
-      //   setIsRecording(false);
-      // }, 5000);
     } catch (error) {
       console.error("Error recording audio:", error);
       setIsRecording(false);
@@ -136,31 +351,12 @@ const Dashboard = () => {
       waveSurfer.current.empty();
     }
   };
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+
   const handleRestartRecording = () => {
     resetRecording();
     startRecording();
   };
-  const {
-    data: dialogData,
-    isFetching,
-    isLoading,
-  } = useGetDialogueDataQuery({
-    getUrl: `${endpoints.getSingleTask}/${userInfo?._id}`,
-  });
-  const {
-    data: taskCountData,
-    isFetching: taskCountDataIsFetching,
-    isLoading: taskCountDataIsLoading,
-  } = useGetDialogueDataQuery({
-    getUrl: `${endpoints.getTaskCount}/${userInfo?._id}`,
-  });
 
-  const { error, warning, success } = useToast();
   useEffect(() => {
     //@ts-ignore
     if (getUserDataError && getUserDataError.status === 403) {
@@ -174,34 +370,6 @@ const Dashboard = () => {
       warning(dialogData?.responseMessage);
     }
   }, [dialogData]);
-
-  useEffect(() => {
-    if ("data" in result) {
-      const apiResponse = result?.data;
-      if (apiResponse.responseCode === 200) {
-        success(apiResponse.responseMessage);
-      } else {
-        error(apiResponse.responseMessage);
-      }
-    }
-    if (result.isError) {
-      error("Something went Wrong!");
-    }
-  }, [result, dialogData]);
-
-  useEffect(() => {
-    if ("data" in handleSaveRecordingResult) {
-      const apiResponse = handleSaveRecordingResult?.data;
-      if (apiResponse.responseCode === 200) {
-        success(apiResponse.responseMessage);
-      } else {
-        error(apiResponse.responseMessage);
-      }
-    }
-    if (handleSaveRecordingResult.isError) {
-      error("Something went Wrong!");
-    }
-  }, [handleSaveRecordingResult]);
 
   useEffect(() => {
     const loginResponse = data?.data;
@@ -228,16 +396,7 @@ const Dashboard = () => {
         lastname={userInfo?.lastname ?? ""}
         _id={userInfo?._id ?? ""}
       />
-      <Spin
-        spinning={
-          isLoading ||
-          isFetching ||
-          result.isLoading ||
-          taskCountDataIsFetching ||
-          taskCountDataIsLoading ||
-          handleSaveRecordingResult.isLoading
-        }
-      >
+      <Spin spinning={loading}>
         <section className=" min-h-[80svh] ">
           <div className="grid gap-6 mt-6 md:grid-cols-2 place-items-center md:gap-0">
             <div className="flex gap-5 h-max">
@@ -314,17 +473,9 @@ const Dashboard = () => {
           <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
             {dialogData?.data?.taskStage === 1 && (
               <Button
-                className=" border border-[#E3E6EA] text-[#096A95] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-4"
+                className=" border border-[#E3E6EA] text-[#096A95] text-base font-[gilroy-medium] !py-2 !px-4"
                 onClick={() => {
-                  handleSkiptask({
-                    ...state,
-                    postUrl: endpoints.skipTask,
-                    request: {
-                      userId: userInfo?._id,
-                      subDialogueId: dialogData?.data?.subDialogueId,
-                      taskId: dialogData?.data?.taskId,
-                    },
-                  });
+                  handleSkipTask();
                 }}
               >
                 Skip {">>"}
@@ -338,8 +489,8 @@ const Dashboard = () => {
                   (dialogData?.data?.taskStage === 2 &&
                     (!state.request?.language || !state.request?.translateText))
                 }
-                className=" border bg-[#096A9540] text-[#19213D] text-base font-semi-bold font-[gilroy-semibold] !py-2 !px-5 disabled:cursor-not-allowed"
-                onClick={() => {
+                className=" border bg-[#096A9540] text-[#19213D] text-base  font-[gilroy-medium] !py-2 !px-5 disabled:cursor-not-allowed"
+                onClick={async () => {
                   if (
                     dialogData?.data?.taskStage > 3 ||
                     dialogData?.data?.taskStage < 1
@@ -347,53 +498,14 @@ const Dashboard = () => {
                     return;
                   }
                   if (dialogData?.data?.taskStage === 1) {
-                    handleSaveRecording({
-                      ...state,
-                      postUrl: endpoints.recordTask,
-                      request: {
-                        userId: userInfo?._id,
-                        subDialogueId: dialogData?.data?.subDialogueId,
-                        dialogueId: dialogData?.data?.dialogueId,
-                        taskId: dialogData?.data?.taskId,
-                        taskStage: dialogData?.data?.taskStage,
-                        filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
-                      },
-                    });
+                    recordFormSubmitHandler();
                   }
                   if (dialogData?.data?.taskStage === 2) {
-                    handleSaveRecording({
-                      ...state,
-                      postUrl: endpoints.translateTask,
-                      request: {
-                        userId: userInfo?._id,
-                        subDialogueId: dialogData?.data?.subDialogueId,
-                        dialogueId: dialogData?.data?.dialogueId,
-                        taskId: dialogData?.data?.taskId,
-                        taskStage: dialogData?.data?.taskStage,
-                        translateText: state.request.translateText,
-                        language: state.request.language,
-                      },
-                    });
-                    resetRecording();
-                    resetRecording();
+                    handleSaveTranslation();
                   }
                   if (dialogData?.data?.taskStage === 3) {
-                    handleSaveRecording({
-                      ...state,
-                      postUrl: endpoints.speakTask,
-                      request: {
-                        userId: userInfo?._id,
-                        subDialogueId: dialogData?.data?.subDialogueId,
-                        dialogueId: dialogData?.data?.dialogueId,
-                        taskId: dialogData?.data?.taskId,
-                        taskStage: dialogData?.data?.taskStage,
-                        language: state.request.language,
-                        filePath: `http://commondatastorage.googleapis.com/${Math.random()}codeskulptor-assets/Evillaugh.ogg`,
-                      },
-                    });
+                    speakFormSubmitHandler();
                   }
-                  resetRecording();
-                  resetRecording();
                 }}
               >
                 Save
