@@ -19,7 +19,7 @@ const Footer = () => {
       <p className=" text-center">@2024 LangEasy. All Rights Reserved</p>
 
       <ul className=" justify-between flex flex-col md:flex-row sm:flex-row md:gap-7 gap-1 items-center">
-        <a href="">
+        <a href="https://www.awarri.com/" target="_blank" rel="noreferrer">
           <li>About</li>
         </a>
 

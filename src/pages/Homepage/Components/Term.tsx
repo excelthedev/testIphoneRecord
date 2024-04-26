@@ -39,14 +39,13 @@ const Term: React.FC<ModalProps> = ({ openModal, setOpenModal }) => {
               <h1 className=" font-bold">Intellectual Property: </h1>All
               content, including but not limited to text, images, audio
               recordings, and software, provided on the Portal is the property
-              of [Company Name] or its licensors and is protected by
-              intellectual property laws. Users may not use, reproduce, or
-              distribute any content from the Portal without prior
-              authorization.
+              of Awarri or its licensors and is protected by intellectual
+              property laws. Users may not use, reproduce, or distribute any
+              content from the Portal without prior authorization.
             </li>
             <li>
-              <h1 className=" font-bold">Privacy: </h1>[Company Name] respects
-              the privacy of its users. Please refer to our Privacy Policy for
+              <h1 className=" font-bold">Privacy: </h1>Awarri respects the
+              privacy of its users. Please refer to our Privacy Policy for
               information on how we collect, use, and disclose personal
               information.
             </li>
@@ -64,13 +63,13 @@ const Term: React.FC<ModalProps> = ({ openModal, setOpenModal }) => {
             </li>
             <li>
               <h1 className=" font-bold">Governing Law: </h1>These Terms of Use
-              shall be governed by and construed in accordance with the laws of
-              [Jurisdiction], without regard to its conflict of law provisions
+              shall be governed by and construed in accordance with the law,
+              without regard to its conflict of law provisions
             </li>
             <li>
               <h1 className=" font-bold">Contact Information:</h1> If you have
               any questions or concerns regarding these Terms of Use, please
-              contact us at [Contact Email].
+              contact us at info@awarri.com.
             </li>
           </ol>
         </div>

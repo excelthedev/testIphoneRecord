@@ -71,7 +71,7 @@ const Privacy: React.FC<ModalProps> = ({ openModal, setOpenModal }) => {
             <li>
               <h1 className=" font-bold">Contact Information: </h1>If you have
               any questions or concerns regarding this Privacy Policy, please
-              contact us at [Contact Email].
+              contact us at info@awarri.com.
             </li>
           </ol>
         </div>
