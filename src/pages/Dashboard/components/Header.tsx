@@ -6,12 +6,8 @@ import { PageModal } from "../../../components/Modal";
 import { Popover } from "antd";
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../../utils/routes";
-import { useDispatch } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setAllAppState } from "../../../store";
 
-// import HamburgerIcon from "../../../assets/icons/HamburgerIcon";
-
+import { useResetApiState } from "../../../hooks/useRestApi";
 export type userInfoType = {
   _id?: string;
   firstname?: string;
@@ -33,17 +29,11 @@ export type userInfoObject = {
 const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const [openMenu, setOpenMenu] = useState(false);
-  const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => {
-    return state.app;
-  });
 
-  // const [logoutHandler, result] = useAuthPostDataMutation();
-
+  const resetApiState = useResetApiState();
   const handleLogout = () => {
-    dispatch(setAllAppState({ state: {} }));
     sessionStorage.clear();
+    resetApiState();
     navigate(ROUTES.HOMEPAGE, { replace: true });
     // logoutHandler({
     //   ...state,
@@ -53,7 +43,6 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
     //   },
     // });
   };
-  // const menushowStyle = ` ${openMenu ? `flex` : `hidden`} `;
 
   return (
     <>

@@ -19,6 +19,7 @@ const rootReducer = combineReducers({
 });
 export const store = configureStore({
   reducer: rootReducer,
+
   devTools: import.meta.env.PROD === false,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
