@@ -6,7 +6,11 @@ import { PageModal } from "../../../components/Modal";
 import { Popover } from "antd";
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../../utils/routes";
-import HamburgerIcon from "../../../assets/icons/HamburgerIcon";
+import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setAllAppState } from "../../../store";
+
+// import HamburgerIcon from "../../../assets/icons/HamburgerIcon";
 
 export type userInfoType = {
   _id?: string;
@@ -30,12 +34,17 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
-  // const state = useAppSelector((state) => {
-  //   return state.app;
-  // });
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((state) => {
+    return state.app;
+  });
+
   // const [logoutHandler, result] = useAuthPostDataMutation();
 
   const handleLogout = () => {
+    dispatch(setAllAppState({ state: {} }));
+    sessionStorage.clear();
+    navigate(ROUTES.HOMEPAGE, { replace: true });
     // logoutHandler({
     //   ...state,
     //   postUrl: endpoints.auth.logout,
@@ -43,8 +52,6 @@ const Header: React.FC<userInfoObject> = ({ email, firstname, lastname }) => {
     //     _id: _id,
     //   },
     // });
-    sessionStorage.clear();
-    navigate(ROUTES.HOMEPAGE, { replace: true });
   };
   // const menushowStyle = ` ${openMenu ? `flex` : `hidden`} `;
 

@@ -450,7 +450,7 @@ const Dashboard = () => {
             </div>
           </div>
           {dialogData?.responseCode === 209 ? (
-            <div className="w-full sm:w-[60%] mx-auto my-8 bg-white p-4 rounded-2xl text-center font-[gilroy-medium]">
+            <div className="w-full sm:w-[60%] mx-auto my-8 bg-white p-4 rounded-2xl text-center  font-bold text-[#333333] font-[gilroy-bold] sm:text-2xl text-lg px-5 py-10">
               {dialogData?.responseMessage}
             </div>
           ) : (
