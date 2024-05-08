@@ -146,22 +146,66 @@ const Recorder = () => {
     }
   };
 
+  // OLD START RECORDING (WHICH WAS NOT WORKING ON IOS)
+
+  // const startRecording = async () => {
+  //   setIsRecording(true);
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //     setMediaStream(stream);
+
+  //     const recorder = new MediaRecorder(stream);
+  //     const chunks: BlobPart[] = [];
+
+  //     recorder.ondataavailable = (e) => {
+  //       chunks.push(e.data);
+  //     };
+
+  //     recorder.onstop = async () => {
+  //       const audioBlob = new Blob(chunks, { type: "audio/mp3" });
+  //       // setRecording(audioBlob);
+  //       setAudioUrl(URL.createObjectURL(audioBlob));
+  //     };
+
+  //     recorder.start();
+  //     // Stop recording after 5 seconds
+  //     setTimeout(() => {
+  //       recorder.stop();
+  //       stream.getTracks().forEach((track) => {
+  //         track.stop();
+  //       });
+  //       setIsRecording(false);
+  //     }, 5000);
+  //   } catch (error) {
+  //     console.error("Error recording audio:", error);
+  //     setIsRecording(false);
+  //   }
+  // };
+
+  //NEW START RECORDING FIX (compatible ios fix)
   const startRecording = async () => {
     setIsRecording(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setMediaStream(stream);
 
-      const recorder = new MediaRecorder(stream);
-      const chunks: BlobPart[] = [];
+      let mimeType = "audio/webm"; // Default to webm if no preference
+      if (MediaRecorder.isTypeSupported("audio/mp3")) {
+        mimeType = "audio/mp3";
+      } else if (MediaRecorder.isTypeSupported("audio/webm")) {
+        mimeType = "audio/webm";
+      }
+
+      const options = { mimeType };
+      const recorder = new MediaRecorder(stream, options);
+      const chunks: BlobPart[] = []; // Explicitly typed as an array of BlobPart
 
       recorder.ondataavailable = (e) => {
         chunks.push(e.data);
       };
 
       recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: "audio/mp3" });
-        // setRecording(audioBlob);
+        const audioBlob = new Blob(chunks, { type: mimeType });
         setAudioUrl(URL.createObjectURL(audioBlob));
       };
 
@@ -169,9 +213,7 @@ const Recorder = () => {
       // Stop recording after 5 seconds
       setTimeout(() => {
         recorder.stop();
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
+        stream.getTracks().forEach((track) => track.stop());
         setIsRecording(false);
       }, 5000);
     } catch (error) {
@@ -179,6 +221,7 @@ const Recorder = () => {
       setIsRecording(false);
     }
   };
+
   const stopRecording = () => {
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => {
@@ -187,6 +230,7 @@ const Recorder = () => {
     }
     setIsRecording(false);
   };
+
   // const downloadRecording = () => {
   //   if (recording) {
   //     const url = URL.createObjectURL(recording);

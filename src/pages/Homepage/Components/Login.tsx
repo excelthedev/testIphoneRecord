@@ -19,8 +19,8 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center gap-7">
-      <div className=" flex  flex-col gap-6">
-        <p className="font-[gilroy-medium] text-[#333333] font-normal text-xl text-center ">
+      <div className="flex flex-col gap-6 ">
+        <p className="font-[gilroy-medium] text-[#333333] font-normal text-xl text-center  ">
           Welcome back
         </p>
         <p className="font-[gilroy-medium] text-[#333333] font-normal text-lg text-center">
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
             value: state.request?.password,
           },
         ]}
-        className="w-full place-content-center gap-6 flex flex-col "
+        className="flex flex-col w-full gap-6 place-content-center "
       >
         <Form.Item
           label={
