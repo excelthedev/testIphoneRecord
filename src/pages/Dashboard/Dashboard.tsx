@@ -348,37 +348,36 @@ const Dashboard = () => {
 
         source.connect(processor);
         processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
-
         // Setup logic to invoke stopRecording appropriately
-        const stopRecorder = () => {
-          // Disconnect the processor and source
-          source.disconnect();
-          processor.disconnect();
 
-          // Stop each track on the stream
-          stream.getTracks().forEach((track) => track.stop());
+        // const stopRecorder = () => {
+        //   // Disconnect the processor and source
+        //   source.disconnect();
+        //   processor.disconnect();
 
-          // Optional: Process the audio data chunks
-          let chunks: BlobPart[] = [];
-          // Convert the collected chunks into a Blob
-          const audioBlob = new Blob(chunks, { type: "audio/webm" });
-          const blobUrl = URL.createObjectURL(audioBlob);
+        //   // Stop each track on the stream
+        //   stream.getTracks().forEach((track) => track.stop());
+        //   // Convert the collected chunks into a Blob
+        //   const audioBlob = new Blob(chunks, { type: "audio/webm" });
+        //   const blobUrl = URL.createObjectURL(audioBlob);
 
-          setBlobUrl(audioBlob);
-          setAudioUrl(blobUrl);
+        //   // Update your application's state or UI
+        //   setBlobUrl(audioBlob);
+        //   setAudioUrl(blobUrl);
+        //   setIsRecording(false);
 
-          setIsRecording(false);
-          // Additional processing or cleanup can be done here
-        };
+        //   // Close the message port after all operations are done
+        //   processor.port.close();
+        // };
 
+        stopRecording();
         // Example: Stop recording after 10 seconds
-        setTimeout(stopRecorder, 10000);
+        setTimeout(stopRecording, 10000);
       } catch (error) {
         console.error("Error recording audio:", error);
       }
     } else {
       //useMediaRecorderAPI
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
@@ -418,10 +417,11 @@ const Dashboard = () => {
 
       await audioContext.audioWorklet.addModule("./AudioProcessor.js");
       const processor = new AudioWorkletNode(audioContext, "audio-processor");
+
       processor.disconnect();
       source.disconnect();
       audioContext.close();
-
+      processor.port.close();
       stream.getTracks().forEach((track) => track.stop());
 
       let chunks: BlobPart[] = [];
@@ -432,6 +432,8 @@ const Dashboard = () => {
       setBlobUrl(audioBlob);
       setAudioUrl(blobUrl);
       setIsRecording(false);
+
+      setTimeout(stopRecording, 10000);
     } else {
       if (mediaStream) {
         mediaStream.getTracks().forEach((track) => {
