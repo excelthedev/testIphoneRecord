@@ -350,7 +350,29 @@ const Dashboard = () => {
         processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
 
         // Setup logic to invoke stopRecording appropriately
-        stopRecording();
+        const stopRecorder = () => {
+          // Disconnect the processor and source
+          source.disconnect();
+          processor.disconnect();
+
+          // Stop each track on the stream
+          stream.getTracks().forEach((track) => track.stop());
+
+          // Optional: Process the audio data chunks
+          let chunks: BlobPart[] = [];
+          // Convert the collected chunks into a Blob
+          const audioBlob = new Blob(chunks, { type: "audio/webm" });
+          const blobUrl = URL.createObjectURL(audioBlob);
+
+          setBlobUrl(audioBlob);
+          setAudioUrl(blobUrl);
+
+          setIsRecording(false);
+          // Additional processing or cleanup can be done here
+        };
+
+        // Example: Stop recording after 10 seconds
+        setTimeout(stopRecorder, 10000);
       } catch (error) {
         console.error("Error recording audio:", error);
       }
@@ -409,9 +431,7 @@ const Dashboard = () => {
 
       setBlobUrl(audioBlob);
       setAudioUrl(blobUrl);
-      // Example of how you might use this Blob in a FormData for submission:
-
-      // Here you would submit your formData to a server or handle it according to your application's requirements
+      setIsRecording(false);
     } else {
       if (mediaStream) {
         mediaStream.getTracks().forEach((track) => {
@@ -422,6 +442,7 @@ const Dashboard = () => {
 
     setIsRecording(false);
   };
+
   const resetRecording = () => {
     // setRecording(null);
     setAudioUrl(null);
