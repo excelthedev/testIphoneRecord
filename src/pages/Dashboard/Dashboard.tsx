@@ -308,38 +308,115 @@ const Dashboard = () => {
     }
   };
 
-  const startRecording = async () => {
-    setIsRecording(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setMediaStream(stream);
-
-      const recorder = new MediaRecorder(stream);
-      const chunks: BlobPart[] = [];
-
-      recorder.ondataavailable = (e) => {
-        chunks.push(e.data);
-      };
-
-      recorder.onstop = async () => {
-        const newAudioBlob = new Blob(chunks, { type: "audio/webm" });
-        const newBlobUrl = URL.createObjectURL(newAudioBlob);
-        setBlobUrl(newAudioBlob);
-        setAudioUrl(newBlobUrl);
-      };
-
-      recorder.start();
-    } catch (error) {
-      console.error("Error recording audio:", error);
-      setIsRecording(false);
+  const getDeviceOS = () => {
+    const userAgent = navigator.userAgent;
+    if (
+      userAgent.includes("iPhone") ||
+      userAgent.includes("iPad") ||
+      userAgent.includes("iPod")
+    ) {
+      return "iOS";
+    } else if (userAgent.includes("Android")) {
+      return "Android";
+    } else {
+      return "Unknown";
     }
   };
-  const stopRecording = () => {
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((track) => {
-        track.stop();
-      });
+
+  //OLD START RECORD
+
+  const startRecording = async () => {
+    setIsRecording(true);
+    const deviceOS = getDeviceOS();
+    if (deviceOS === "iOS") {
+      //useWebAudioApi
+      try {
+        const audioContext = new AudioContext();
+        await audioContext.audioWorklet.addModule("./AudioProcessor.js"); // Path to your processor file
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = new AudioWorkletNode(audioContext, "audio-processor");
+
+        let chunks: BlobPart[] = []; // Adjust according to what you are actually collecting
+
+        processor.port.onmessage = (event) => {
+          // Handle data from processor, if needed
+          chunks.push(event.data);
+        };
+
+        source.connect(processor);
+        processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
+
+        // Setup logic to invoke stopRecording appropriately
+      } catch (error) {
+        console.error("Error recording audio:", error);
+      }
+    } else {
+      //useMediaRecorderAPI
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        setMediaStream(stream);
+
+        const recorder = new MediaRecorder(stream);
+        const chunks: BlobPart[] = [];
+
+        recorder.ondataavailable = (e) => {
+          chunks.push(e.data);
+        };
+
+        recorder.onstop = async () => {
+          const newAudioBlob = new Blob(chunks, { type: "audio/webm" });
+          const newBlobUrl = URL.createObjectURL(newAudioBlob);
+          setBlobUrl(newAudioBlob);
+          setAudioUrl(newBlobUrl);
+        };
+
+        recorder.start();
+      } catch (error) {
+        console.error("Error recording audio:", error);
+        setIsRecording(false);
+      }
     }
+  };
+
+  const stopRecording = async () => {
+    const deviceOS = getDeviceOS();
+    if (deviceOS === "iOS") {
+      //useWebAudioAPI
+      const audioContext = new AudioContext();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      const source = audioContext.createMediaStreamSource(stream);
+
+      await audioContext.audioWorklet.addModule("./AudioProcessor.js");
+      const processor = new AudioWorkletNode(audioContext, "audio-processor");
+      processor.disconnect();
+      source.disconnect();
+      audioContext.close();
+
+      let chunks: BlobPart[] = [];
+      // Convert the collected chunks into a Blob
+      const audioBlob = new Blob(chunks, { type: "audio/webm" });
+      const blobUrl = URL.createObjectURL(audioBlob);
+
+      setBlobUrl(audioBlob);
+      setAudioUrl(blobUrl);
+      // Example of how you might use this Blob in a FormData for submission:
+
+      // Here you would submit your formData to a server or handle it according to your application's requirements
+    } else {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+    }
+
     setIsRecording(false);
   };
   const resetRecording = () => {
