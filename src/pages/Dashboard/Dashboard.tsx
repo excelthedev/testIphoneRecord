@@ -350,6 +350,7 @@ const Dashboard = () => {
         processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
 
         // Setup logic to invoke stopRecording appropriately
+        stopRecording();
       } catch (error) {
         console.error("Error recording audio:", error);
       }
@@ -398,6 +399,8 @@ const Dashboard = () => {
       processor.disconnect();
       source.disconnect();
       audioContext.close();
+
+      stream.getTracks().forEach((track) => track.stop());
 
       let chunks: BlobPart[] = [];
       // Convert the collected chunks into a Blob
