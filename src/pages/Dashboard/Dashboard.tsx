@@ -323,7 +323,7 @@ const Dashboard = () => {
     }
   };
 
-  //OLD START RECORD
+  //OLD START AND STOP RECORDING
 
   const startRecording = async () => {
     setIsRecording(true);
@@ -334,6 +334,7 @@ const Dashboard = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
+
         const audioContext = new AudioContext();
         await audioContext.audioWorklet.addModule("./AudioProcessor.js"); // Path to your processor file
 
@@ -351,28 +352,9 @@ const Dashboard = () => {
         processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
         // Setup logic to invoke stopRecording appropriately
 
-        const stopRecorder = () => {
-          // Disconnect the processor and source
-          source.disconnect();
-          processor.disconnect();
+        stopRecording();
 
-          // Stop each track on the stream
-          stream.getTracks().forEach((track) => track.stop());
-          // Convert the collected chunks into a Blob
-          const audioBlob = new Blob(chunks, { type: "audio/webm" });
-          const blobUrl = URL.createObjectURL(audioBlob);
-
-          // Update your application's state or UI
-          setBlobUrl(audioBlob);
-          setAudioUrl(blobUrl);
-          setIsRecording(false);
-
-          // Close the message port after all operations are done
-          processor.port.close();
-        };
-
-        // Example: Stop recording after 10 seconds
-        setTimeout(stopRecorder, 10000);
+        setTimeout(stopRecording, 10000);
       } catch (error) {
         console.error("Error recording audio:", error);
       }
@@ -408,10 +390,47 @@ const Dashboard = () => {
 
   const stopRecording = async () => {
     //This stops the recorder
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((track) => {
-        track.stop();
-      });
+    const deviceOS = getDeviceOS();
+    if (deviceOS === "iOS") {
+      const stopRecorder = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+
+        const audioContext = new AudioContext();
+        await audioContext.audioWorklet.addModule("./AudioProcessor.js"); // Path to your processor file
+
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = new AudioWorkletNode(audioContext, "audio-processor");
+
+        let chunks: BlobPart[] = []; // Adjust according to what you are actually collecting
+        // Disconnect the processor and source
+        source.disconnect();
+        processor.disconnect();
+
+        // Stop each track on the stream
+        stream.getTracks().forEach((track) => track.stop());
+        // Convert the collected chunks into a Blob
+        const audioBlob = new Blob(chunks, { type: "audio/webm" });
+        const blobUrl = URL.createObjectURL(audioBlob);
+
+        // Update your application's state or UI
+        setBlobUrl(audioBlob);
+        setAudioUrl(blobUrl);
+        setIsRecording(false);
+
+        // Close the message port after all operations are done
+        processor.port.close();
+      };
+
+      // Example: Stop recording after 10 seconds
+      setTimeout(stopRecorder, 10000);
+    } else {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
     }
 
     setIsRecording(false);
