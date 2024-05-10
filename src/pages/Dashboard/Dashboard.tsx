@@ -17,6 +17,8 @@ import { useToast } from "../../hooks/useToast";
 import { baseUrl } from "../../store/api/api.config";
 import { Encryption } from "../../utils/encryption";
 
+import RecordRTC from "recordrtc";
+
 const Dashboard = () => {
   const { error, warning, success } = useToast();
 
@@ -308,132 +310,73 @@ const Dashboard = () => {
     }
   };
 
-  const getDeviceOS = () => {
-    const userAgent = navigator.userAgent;
-    if (
-      userAgent.includes("iPhone") ||
-      userAgent.includes("iPad") ||
-      userAgent.includes("iPod")
-    ) {
-      return "iOS";
-    } else if (userAgent.includes("Android")) {
-      return "Android";
-    } else {
-      return "Unknown";
-    }
-  };
-
-  //OLD START AND STOP RECORDING
+  const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
+  const recorderRef = useRef<RecordRTC | null>(null); // useRef to hold the recorder instance
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startRecording = async () => {
     setIsRecording(true);
-    const deviceOS = getDeviceOS();
-    if (deviceOS === "iOS") {
-      //useWebAudioApi
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
 
-        const audioContext = new AudioContext();
-        await audioContext.audioWorklet.addModule("./AudioProcessor.js"); // Path to your processor file
-
-        const source = audioContext.createMediaStreamSource(stream);
-        const processor = new AudioWorkletNode(audioContext, "audio-processor");
-
-        let chunks: BlobPart[] = []; // Adjust according to what you are actually collecting
-
-        processor.port.onmessage = (event) => {
-          // Handle data from processor, if needed
-          chunks.push(event.data);
-        };
-
-        source.connect(processor);
-        processor.connect(audioContext.destination); // Connect to output if needed, or just to keep alive
-        // Setup logic to invoke stopRecording appropriately
-
-        stopRecording();
-
-        setTimeout(stopRecording, 10000);
-      } catch (error) {
-        console.error("Error recording audio:", error);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new RecordRTC(stream, { type: "audio" });
+      recorderRef.current = recorder; // Store recorder in useRef
+      if (recorderRef.current) {
+        recorderRef.current.clearRecordedData(); // Clear any previous recorded data
       }
-    } else {
-      //useMediaRecorderAPI
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        setMediaStream(stream);
+      recorder.startRecording();
 
-        const recorder = new MediaRecorder(stream);
-        const chunks: BlobPart[] = [];
-
-        recorder.ondataavailable = (e) => {
-          chunks.push(e.data);
-        };
-
-        recorder.onstop = async () => {
-          const newAudioBlob = new Blob(chunks, { type: "audio/webm" });
-          const newBlobUrl = URL.createObjectURL(newAudioBlob);
-          setBlobUrl(newAudioBlob);
-          setAudioUrl(newBlobUrl);
-        };
-
-        recorder.start();
-      } catch (error) {
-        console.error("Error recording audio:", error);
-        setIsRecording(false);
-      }
+      // const blobfile=recorder.getBlob
+      // setBlobUrl(blobfile);
+      // const audioUrl= recorder.getDataURL;
+      //   setAudioUrl("audioUrl");
+    } catch (error) {
+      console.error("Error recording audio:", error);
+      setIsRecording(false);
     }
+
+    // try {
+    //   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    //   setMediaStream(stream);
+
+    //   const recorder = new MediaRecorder(stream);
+    //   const chunks: BlobPart[] = [];
+
+    //   recorder.ondataavailable = (e) => {
+    //     chunks.push(e.data);
+    //   };
+
+    //   recorder.onstop = async () => {
+    //     const newAudioBlob = new Blob(chunks, { type: "audio/webm" });
+    //     const newBlobUrl = URL.createObjectURL(newAudioBlob);
+    //     setBlobUrl(newAudioBlob);
+    //     setAudioUrl(newBlobUrl);
+    //   };
+
+    //   recorder.start();
+    // } catch (error) {
+    //   console.error("Error recording audio:", error);
+    //   setIsRecording(false);
+    // }
   };
+  const stopRecording = () => {
+    if (!isRecording || !recorderRef.current) return; // Do nothing if not recording or recorder not initialized
+    recorderRef.current.stopRecording(() => {
+      const blob = recorderRef.current!.getBlob();
+      setBlobUrl(blob);
+      setRecordedAudio(URL.createObjectURL(blob));
+      setIsRecording(false);
 
-  const stopRecording = async () => {
-    //This stops the recorder
-    const deviceOS = getDeviceOS();
-    if (deviceOS === "iOS") {
-      const stopRecorder = async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
+      //get the recoreded sound url and set to Audi
+      setAudioUrl(URL.createObjectURL(blob));
+    });
 
-        const audioContext = new AudioContext();
-        await audioContext.audioWorklet.addModule("./AudioProcessor.js"); // Path to your processor file
-
-        const source = audioContext.createMediaStreamSource(stream);
-        const processor = new AudioWorkletNode(audioContext, "audio-processor");
-
-        let chunks: BlobPart[] = []; // Adjust according to what you are actually collecting
-        // Disconnect the processor and source
-        source.disconnect();
-        processor.disconnect();
-
-        // Stop each track on the stream
-        stream.getTracks().forEach((track) => track.stop());
-        // Convert the collected chunks into a Blob
-        const audioBlob = new Blob(chunks, { type: "audio/webm" });
-        const blobUrl = URL.createObjectURL(audioBlob);
-
-        // Update your application's state or UI
-        setBlobUrl(audioBlob);
-        setAudioUrl(blobUrl);
-        setIsRecording(false);
-
-        // Close the message port after all operations are done
-        processor.port.close();
-      };
-
-      // Example: Stop recording after 10 seconds
-      setTimeout(stopRecorder, 10000);
-    } else {
-      if (mediaStream) {
-        mediaStream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      }
-    }
-
-    setIsRecording(false);
+    // if (mediaStream) {
+    //   mediaStream.getTracks().forEach((track) => {
+    //     track.stop();
+    //   });
+    // }
+    // setIsRecording(false);
   };
 
   const resetRecording = () => {
@@ -548,21 +491,23 @@ const Dashboard = () => {
               {dialogData?.responseMessage}
             </div>
           ) : (
-            <AudioAnnotationSteps
-              audioUrl={audioUrl}
-              currentTime={currentTime}
-              // formatTime={formatTime()}
-              handleRestartRecording={handleRestartRecording}
-              isPlaying={isPlaying}
-              isRecording={isRecording}
-              resetRecording={resetRecording}
-              startRecording={startRecording}
-              stopRecording={stopRecording}
-              togglePlayPause={togglePlayPause}
-              waveformRef={waveformRef}
-              userId={userInfo?._id}
-              data={dialogData}
-            />
+            <>
+              <AudioAnnotationSteps
+                audioUrl={audioUrl}
+                currentTime={currentTime}
+                // formatTime={formatTime()}
+                handleRestartRecording={handleRestartRecording}
+                isPlaying={isPlaying}
+                isRecording={isRecording}
+                resetRecording={resetRecording}
+                startRecording={startRecording}
+                stopRecording={stopRecording}
+                togglePlayPause={togglePlayPause}
+                waveformRef={waveformRef}
+                userId={userInfo?._id}
+                data={dialogData}
+              />
+            </>
           )}
           <div className="flex justify-center gap-5 mt-20 mb-6 md:justify-end">
             {dialogData?.data?.taskStage === 1 && (

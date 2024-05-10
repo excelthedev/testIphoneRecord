@@ -54,7 +54,7 @@ const AudioAnnotationSteps: React.FC<Props> = ({
           <span className="flex items-center justify-center ">
             Click <NoBgRecorder />
           </span>
-          <p> and read the sentence aloud</p>
+          <p> and read the sentence aloud </p>
         </span>
       )}
       {(data?.data?.taskStage === 1 || 3) && isRecording && (
